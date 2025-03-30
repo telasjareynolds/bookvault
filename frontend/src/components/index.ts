@@ -1,1 +1,2 @@
-import * from "./header";
+import * from "./layout";
+import * from "./modals";

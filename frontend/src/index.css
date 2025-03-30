@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 /* Optional: Your global styles here */
+@font-face {
+  font-family: "BonaNova";
+  src: url("./vendor/fonts/BonaNovaSC-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  @apply bg-gray-300
+  font-family: BonaNova, sans-serif;
 }
