@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="items-center justify-center text-center flex  px-5 py-2 relative flex-wrap bg-black text-white sm:justify-between">
+    <footer className="items-center justify-center text-center flex flex-col px-5 py-2 relative flex-wrap bg-black text-white sm:justify-between sm:flex-row">
       <p>@ 2024 Telasja Reynolds, Powered by OMDb API</p>
       <nav className="flex items-center">
         <Link
