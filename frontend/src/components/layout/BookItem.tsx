@@ -18,7 +18,7 @@ function BookItem({ book /*, handleSaveMovie, isLoggedIn, savedMovies */ }) {
   let isMovieSaved = true;
 
   return (
-    <li className="relative transition-transform hover:-translate-y-5">
+    <li className="w-[250px] md:w-[200px] lg:w-[225px] relative transition-transform hover:-translate-y-5">
       <Link className="no-underline" to={`${book.link}`}>
         <div className="relative list-none flex flex-col w-full bg-slate-200 rounded-xl border-blue-50 border-[0.5px]shadow-none overflow-hidden justify-between items-center h-full shadow-[4px_2px_9px_red]">
           <img

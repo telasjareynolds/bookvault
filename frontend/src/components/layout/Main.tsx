@@ -38,7 +38,7 @@ function Main(
     mt-0 
     mb-12 
     list-none 
-    max-w-screen-2xl 
+   max-w-screen-2xl
     sm:grid-cols-2 sm:mt-7 
     md:grid-cols-3 
     lg:grid-cols-4 
