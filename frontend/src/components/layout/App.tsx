@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import libraryBg from "../../images/library-4.jpg";
 // import ProtectedRoute from './components/protected-route/protected-route';
-import { Header, Footer } from "./index.ts";
+import { Header, Footer, Main } from "./index.ts";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.ts";
 
 interface User {
@@ -25,12 +25,12 @@ function App() {
       <div
         className="flex flex-wrap sm:items-center sm:justify-center relative w-full min-h-screen bg-repeat bg-[length:400px_400px] font-[BonaNova] text-center"
         style={{
-          backgroundImage: `url(${libraryBg}), radial-gradient(circle at top center, rgba(0,0,0,0.750), rgba(0,0,0,.6))`,
+          backgroundImage: `url(${libraryBg}), radial-gradient(circle at top center, rgba(0,0,0,0.550), rgba(0,0,0,.5))`,
           backgroundBlendMode: "overlay",
         }}
       >
         <Routes>
-          <Route path="/" element={<div>Home Route</div>} />
+        <Route path="/" element={<Main/>} />
           {/* <Route path="/welcome" element={<Welcome />} />
         <Route path="/registration" element={<AccountCreationForm />} />
         <Route path="/registration-confirm" element={<RegistrationConfirmation />} />

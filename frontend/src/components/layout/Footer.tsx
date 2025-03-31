@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="items-center justify-center text-center flex flex-col px-5 py-2 relative flex-wrap bg-black text-white sm:justify-between sm:flex-row">
-      <p>@ 2024 Telasja Reynolds, Powered by OMDb API</p>
+      <p>@ 2025 Telasja Reynolds, Powered by OMDb API</p>
       <nav className="flex items-center">
         <Link
           to="/about"
@@ -17,7 +17,11 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img src={github} alt="github icon" className="h-7 w-7 transition transform hover:-translate-y-1 hover:text-[20px] hover:h-8 hover:w-8" />
+          <img
+            src={github}
+            alt="github icon"
+            className="h-7 w-7 transition transform hover:-translate-y-1 hover:text-[20px] hover:h-8 hover:w-8"
+          />
         </a>
       </nav>
     </footer>
