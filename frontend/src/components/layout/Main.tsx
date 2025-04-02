@@ -21,7 +21,7 @@ function Main(
     <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">
         <h1 className=" m-0 text-4xl leading-6 md:mx-0 md:mt-10 md:mb-8 ">
-          Fan Favorites
+          Explore Library
         </h1>
         {!books || books.length === 0 ? (
           <p className="text-4xl text-red-600 text-cetner mt-24">

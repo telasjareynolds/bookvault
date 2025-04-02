@@ -11,7 +11,7 @@ export function useFormWithValidation() {
 
   // For validation add a [errors, setErrors]
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setValues((values) => ({ ...values, [e.target.name]: e.target.value }));
     setErrors((errors) => ({
       ...errors,
