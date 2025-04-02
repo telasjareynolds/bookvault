@@ -13,13 +13,21 @@ export function useFormWithValidation(initialValues: FormValues = {}) {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, validationMessage, type } = e.target;
-    const parsedValue = type === "number" ? Number(value) : value;
-
-    setValues((prev) => ({ ...prev, [name]: parsedValue }));
+  
+    const parsedValue =
+      name === "year" && /^\d{0,4}$/.test(value) ? value : type === "number" ? Number(value) : value;
+  
+    setValues((prev) => ({
+      ...prev,
+      [name]: parsedValue,
+    }));
+  
     setErrors((prev) => ({
       ...prev,
       [name]: validationMessage,
     }));
+  
+    // ✅ checkValidity won't crash now, since e.target is untouched
     setIsValid(e.target.closest("form")?.checkValidity() || false);
   }
 

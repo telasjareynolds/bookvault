@@ -4,6 +4,7 @@ import { books as defaultBooks } from "../utils/book-data";
 // Types
 export interface User {
   email: string;
+  password?: string;
   name: string;
   _id: string;
 }

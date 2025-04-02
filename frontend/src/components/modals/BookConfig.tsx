@@ -100,17 +100,16 @@ const BookConfig = ({
       <label className="text-blue-500 mt-6">
         Year *{" "}
         <input
-          className={modalInputClassName}
+          type="text"
           name="year"
-          autoComplete="year"
           id="year"
-          type="number"
           placeholder="Year"
-          onChange={handleChange}
-          value={values.year}
-          minLength={2}
+          pattern="^\d{4}$"
           maxLength={4}
           required
+          value={values.year?.toString() ?? ""}
+          onChange={handleChange}
+          className={modalInputClassName}
         />
         {errors.year && <span className="text-red-600">{errors.year}</span>}
       </label>

@@ -14,7 +14,7 @@ export const authorize = (email, password) => {
   });
 };
 
-export const signup = (email, password, username) => {
+export const signup = (email, password, name: username) => {
   return request(`${BASE_URL}/register`, {
     method: "POST",
     headers: {
@@ -22,7 +22,7 @@ export const signup = (email, password, username) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username,
+      name: username,
       email,
       password,
     }),

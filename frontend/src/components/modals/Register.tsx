@@ -52,7 +52,7 @@ function Register({
           placeholder="Email"
           onChange={handleChange}
           value={values.email}
-          minLength={2}
+          minLength={6}
         />
         {errors.email && <span className="text-red-600">{errors.email}</span>}
       </label>
@@ -74,21 +74,19 @@ function Register({
         )}
       </label>
       <label className="text-blue-500 mt-6">
-        Userame *{" "}
+        Name *{" "}
         <input
-          name="username"
+          name="name"
           className={modalInputClassName}
-          id="username"
+          id="name"
           type="text"
-          autoComplete="username"
-          placeholder="Username"
+          autoComplete="name"
+          placeholder="Name"
           onChange={handleChange}
-          value={values.username}
+          value={values.name}
           minLength={2}
         />
-        {errors.username && (
-          <span className="text-red-600">{errors.username}</span>
-        )}
+        {errors.name && <span className="text-red-600">{errors.name}</span>}
       </label>
       <button
         type="button"
