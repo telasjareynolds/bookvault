@@ -30,6 +30,11 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
     addToCollection(book);
   }
 
+  // Logic that allows the default books to attach github's book data URL format while accepting full URLs from other sources
+  const imageUrl = book.imageLink.startsWith("http")
+  ? book.imageLink
+  : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
+
   let isLoggedIn = true;
   let isMovieSaved = false;
 
@@ -38,7 +43,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
       <Link className="no-underline" to={`${book.link}`} target="_blank">
         <div className="relative list-none flex flex-col w-full bg-white bg-opacity-75 rounded-xl border-blue-50 border-[0.5px]shadow-none overflow-hidden justify-between items-center h-full shadow-[4px_2px_9px_red]">
           <img
-            src={`https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`}
+            src={imageUrl}
             alt={book.title}
             className="w-full h-auto object-cover"
           />

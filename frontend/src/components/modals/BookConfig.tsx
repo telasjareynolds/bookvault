@@ -27,8 +27,6 @@ const BookConfig = ({
     link: "",
   };
 
-
-
   const { values, handleChange, isValid, errors, resetForm } =
     useFormWithValidation(initialValues);
 
@@ -45,7 +43,6 @@ const BookConfig = ({
       resetForm(initialValues); // Clearing the form for "Create" mode
     }
   }, [selectedBook, mode, isOpen]);
-    
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -111,7 +108,8 @@ const BookConfig = ({
           placeholder="Year"
           onChange={handleChange}
           value={values.year}
-          minLength={4}
+          minLength={2}
+          maxLength={4}
           required
         />
         {errors.year && <span className="text-red-600">{errors.year}</span>}
