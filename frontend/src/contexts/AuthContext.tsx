@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { books as defaultBooks } from "../utils/book-data";
 
 // Types
 export interface User {
@@ -58,7 +59,7 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [savedBooks, setSavedBooks] = useState<Book[]>([]);
+  const [savedBooks, setSavedBooks] = useState<Book[]>(defaultBooks);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeModal, setActiveModal] = useState("");

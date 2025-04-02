@@ -14,6 +14,7 @@ import {
 import { useAuth } from "./contexts/AuthContext.tsx";
 
 function App() {
+  const [bookFormMode, setBookFormMode] = useState<"create" | "edit">("create");
   const {
     currentUser,
     handleLogin,
@@ -25,15 +26,14 @@ function App() {
     closeModal,
     activeModal,
     selectedBookId,
-    isLoading
+    isLoading,
   } = useAuth();
- 
 
   //Stop ESC listener if there are no active modals
   useEffect(() => {
     if (!activeModal) return;
 
-    const handleEscClose = (e) => {
+    const handleEscClose = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Escape") {
         closeModal();
       }
@@ -45,6 +45,14 @@ function App() {
       document.removeEventListener("keydown", handleEscClose);
     };
   }, [activeModal]);
+
+  // Get full book object for bookId
+  const selectedBook = books.find((book) => book._id === selectedBookId);
+
+  console.log(selectedBook);
+  console.log("Books:", books);
+console.log("Selected Book ID:", selectedBookId);
+
 
   return (
     <>
@@ -64,7 +72,10 @@ function App() {
             }}
           >
             <Routes>
-              <Route path="/" element={<Main />} />
+              <Route
+                path="/"
+                element={<Main setBookFormMode={setBookFormMode} />}
+              />
             </Routes>
           </div>
           <Footer />
@@ -106,12 +117,16 @@ function App() {
         handleModalClose={closeModal}
         name="confirm-delete"
         isOpen={activeModal === "confirm-delete"}
-        bookId={deleteBook}
+        bookId={selectedBook?._id}
       />
       <BookConfig
+        title={bookFormMode === "edit" ? "Edit Book" : "Create Book"}
+        selectedBook={selectedBook}
         handleModalClose={closeModal}
         name="configure-book"
         isOpen={activeModal === "configure-book"}
+        mode={bookFormMode}
+        buttonText={isLoading ? "Saving..." : "Save"}
       />
     </>
   );

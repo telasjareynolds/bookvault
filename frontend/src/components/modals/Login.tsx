@@ -23,7 +23,7 @@ function Login({
     handleLogin(values.email, values.password);
   };
 
-  const modalInputClassName = `border-b-2 border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0`;
+  const modalInputClassName = `border-b-2 border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0 text-black`;
   
   return (
     <ModalWithForm

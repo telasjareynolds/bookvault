@@ -13,7 +13,7 @@ interface BookItemProps {
 function BookItem({ book, setBookFormMode }: BookItemProps) {
   const { openModal, setSelectedBookId, addToCollection } = useAuth();
 
-  const handleOpenConfigModal = () => {
+  const handleOpenEditModal = () => {
     setBookFormMode("edit");
     setSelectedBookId(book._id);
     openModal("configure-book");
@@ -31,11 +31,11 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
   }
 
   let isLoggedIn = true;
-  let isMovieSaved = true;
+  let isMovieSaved = false;
 
   return (
     <li className="w-[250px] md:w-[200px] lg:w-[225px] relative transition-transform hover:-translate-y-5">
-      <Link className="no-underline" to={`${book.link}`}>
+      <Link className="no-underline" to={`${book.link}`} target="_blank">
         <div className="relative list-none flex flex-col w-full bg-white bg-opacity-75 rounded-xl border-blue-50 border-[0.5px]shadow-none overflow-hidden justify-between items-center h-full shadow-[4px_2px_9px_red]">
           <img
             src={`https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`}
@@ -47,7 +47,9 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
               <span className="border-b-2 border-black border-opacity-30">
                 {book.title}
               </span>
-              {book.author !== "Unknown" && <span>{` by ${book.author}`}</span>}
+              {book.author && book.author !== "Unknown" && (
+                <span>{` by ${book.author}`}</span>
+              )}
               <span>{` (${book.year})`}</span>
             </p>
           </div>
@@ -65,7 +67,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
             src={editBtn}
             alt="Edit button"
             className="absolute top-14 right-3 h-7 w-7 bg-white rounded-lg cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_8px_25px_rgba(0,0,0,0.9)] p-[5px]"
-            onClick={handleOpenConfigModal}
+            onClick={handleOpenEditModal}
           />
         </>
       )}
