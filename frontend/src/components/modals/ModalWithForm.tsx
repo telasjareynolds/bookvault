@@ -38,12 +38,12 @@ export const ModalWithForm = ({
       id="modal-overlay"
       className={`fixed inset-0 z-[999] flex items-center justify-center transition-opacity duration-300 ease-in-out ${
         isOpen
-          ? "opacity-100 pointer-events-auto bg-black bg-opacity-80"
+          ? "opacity-100 pointer-events-auto bg-black bg-opacity-70"
           : "opacity-0 pointer-events-none"
       }`}
       onClick={handleOverlayClick}
     >
-      <div className="relative bg-white text-black min-w-60 border rounded-3xl border-black padding pt-5 px-10 pb-20 sm:min-w-96">
+      <div className="relative bg-white text-black min-w-60 border rounded-3xl border-black padding pt-5 px-10 pb-16 sm:min-w-96">
         <h2 className="p-0 mx-0 mb-0 mt-7">{title}</h2>
         <button
           onClick={handleModalClose}
@@ -60,7 +60,7 @@ export const ModalWithForm = ({
           {showSubmitButton && (
             <button
               type="submit"
-              className="w-full sm:w-auto flex justify-center items-center text-center bg-black hover:bg-slate-900 text-white border-none pt-2 mt-5 px-6 py-3 rounded-full transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto flex justify-center items-center text-center bg-black hover:bg-slate-900 text-white border-none mt-5 px-6 py-3 rounded-full transition disabled:opacity-60 disabled:cursor-not-allowed"
               disabled={!isValid}
             >
               {buttonText}

@@ -2,18 +2,33 @@ import saved from "../../images/saved_btn.svg";
 import unsaved from "../../images/unsaved_btn.svg";
 import { Link } from "react-router-dom";
 import editBtn from "../../images/edit-button.png";
+import { Book } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
-function BookItem({ book /*, handleSaveMovie, isLoggedIn, savedMovies */ }) {
+interface BookItemProps {
+  book: Book;
+  setBookFormMode: (mode: "create" | "edit") => void;
+}
+
+function BookItem({ book, setBookFormMode }: BookItemProps) {
+  const { openModal, setSelectedBookId, addToCollection } = useAuth();
+
+  const handleOpenConfigModal = () => {
+    setBookFormMode("edit");
+    setSelectedBookId(book._id);
+    openModal("configure-book");
+  };
+
   // const isMovieSaved = savedMovies.some(
   //   (savedMovie) => savedMovie.imdbID === movie.imdbID
   // );
 
   // set card Save on frontend until backend is built
 
-  // function onCardSave(e) {
-  //   e.preventDefault();
-  //   handleSaveMovie(movie);
-  // }
+  function onBookSave(e: React.MouseEvent<HTMLImageElement>) {
+    e.preventDefault();
+    addToCollection(book);
+  }
 
   let isLoggedIn = true;
   let isMovieSaved = true;
@@ -38,22 +53,22 @@ function BookItem({ book /*, handleSaveMovie, isLoggedIn, savedMovies */ }) {
           </div>
         </div>
       </Link>
-{isLoggedIn && (
-  <>
-    <img
-      src={isMovieSaved ? saved : unsaved}
-      alt={isMovieSaved ? "saved" : "not saved"}
-      className="absolute top-4 right-3 h-8 w-8 cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-lg"
-      // onClick={onCardSave}
-    />
-    <img
-      src={editBtn}
-      alt="Edit button"
-      className="absolute top-14 right-3 h-7 w-7 bg-white rounded-lg cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_8px_25px_rgba(0,0,0,0.9)] p-[5px]"
-      // onClick={openEditModal}
-    />
-  </>
-)}
+      {isLoggedIn && (
+        <>
+          <img
+            src={isMovieSaved ? saved : unsaved}
+            alt={isMovieSaved ? "saved" : "not saved"}
+            className="absolute top-4 right-3 h-8 w-8 cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-lg"
+            onClick={onBookSave}
+          />
+          <img
+            src={editBtn}
+            alt="Edit button"
+            className="absolute top-14 right-3 h-7 w-7 bg-white rounded-lg cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_8px_25px_rgba(0,0,0,0.9)] p-[5px]"
+            onClick={handleOpenConfigModal}
+          />
+        </>
+      )}
     </li>
   );
 }

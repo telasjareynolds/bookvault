@@ -9,6 +9,7 @@ import {
   Register,
   ConfirmLogout,
   ConfirmDelete,
+  BookConfig,
 } from "./components/index.ts";
 import { useAuth } from "./contexts/AuthContext.tsx";
 
@@ -23,8 +24,10 @@ function App() {
     openModal,
     closeModal,
     activeModal,
+    selectedBookId,
+    isLoading
   } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+ 
 
   //Stop ESC listener if there are no active modals
   useEffect(() => {
@@ -104,6 +107,11 @@ function App() {
         name="confirm-delete"
         isOpen={activeModal === "confirm-delete"}
         bookId={deleteBook}
+      />
+      <BookConfig
+        handleModalClose={closeModal}
+        name="configure-book"
+        isOpen={activeModal === "configure-book"}
       />
     </>
   );

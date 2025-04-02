@@ -17,6 +17,7 @@ export interface Book {
   pages?: number;
   link: string;
 }
+
 export interface UserWithCollection extends User {
   savedBooks: Book[];
 }
@@ -49,6 +50,8 @@ export interface AuthContextType {
   deleteBook: (id: string) => Promise<void>;
   addToCollection: (book: Book) => void;
   removeFromCollection: (id: string) => void;
+  selectedBookId: Book["_id"] | null;
+  setSelectedBookId: (id: Book["_id"] | null) => void;
 }
 
 // Create Context
@@ -58,7 +61,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [savedBooks, setSavedBooks] = useState<Book[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeModal, setActiveModal] = useState("confirm-delete");
+  const [activeModal, setActiveModal] = useState("");
+  const [selectedBookId, setSelectedBookId] = useState<Book["_id"] | null>(
+    null
+  );
 
   const openModal = (modal: string) => {
     console.log("Modal button clicked", modal);
@@ -68,6 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // STUBS — Add real logic later
   const handleLogin = async (email: string, password: string) => {
+    setIsLoading(true);
     return {
       email,
       name: "Demo",
@@ -95,6 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     id: string,
     updates: Partial<BookInput>
   ): Promise<Book> => {
+    setSelectedBookId(id);
     return {
       _id: id,
       title: updates.title ?? "Untitled Book",
@@ -107,7 +115,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   };
 
-  const deleteBook = async (id: string) => {};
+  const deleteBook = async (id: string) => {
+    setSelectedBookId(id);
+  };
 
   const addToCollection = (book: Book) => {
     setSavedBooks((prev) => [...prev, book]);
@@ -134,6 +144,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         deleteBook,
         addToCollection,
         removeFromCollection,
+        selectedBookId,
+        setSelectedBookId,
       }}
     >
       {" "}

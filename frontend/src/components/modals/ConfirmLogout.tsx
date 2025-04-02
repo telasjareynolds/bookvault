@@ -1,8 +1,7 @@
 import { useAuth } from "../../contexts/AuthContext";
-import { ModalWithForm, ModalWithFormProps} from "./ModalWithForm";
+import { ModalWithForm, ModalWithFormProps } from "./ModalWithForm";
 
 function ConfirmLogout({ isOpen, handleModalClose }: ModalWithFormProps) {
-
   const { logout } = useAuth();
   return (
     <ModalWithForm
@@ -12,7 +11,11 @@ function ConfirmLogout({ isOpen, handleModalClose }: ModalWithFormProps) {
       isOpen={isOpen}
       showSubmitButton={false}
     >
-      <button type="button" className="signout-btn" onClick={logout}>
+      <button
+        type="button"
+        className="absolute bottom-[46px] left-[42px] text-[#2f71e5] hover:text-[#2f72e58b] bg-white border-none text-[20px] font-bold font-[BonaNova] px-0 py-0 w-fit"
+        onClick={logout}
+      >
         Log Out
       </button>
     </ModalWithForm>
