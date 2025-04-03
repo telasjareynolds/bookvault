@@ -1,26 +1,35 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import React from "react";
 
-export default function ProtectedRoute({
+interface ProtectedRouteProps {
+  children: JSX.Element;
+  anonymous?: boolean;
+  isLoggedInLoading?: boolean;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   anonymous = false,
-  isLoggedInLoading,
-}) {
-
-  const {isLoggedIn}
+  isLoggedInLoading = false,
+}) => {
+  const { isLoggedIn } = useAuth();
   const location = useLocation();
   const from = location.state?.from || "/";
 
   if (isLoggedInLoading) return null;
 
-  // If the user is logged in redirect them away from our anonymous routes.
   if (anonymous && isLoggedIn) {
-    return <Navigate to={from} />;
+    // Redirect logged-in users away from pages like /login or /register
+    return <Navigate to={from} replace />;
   }
 
   if (!anonymous && !isLoggedIn) {
-    return <Navigate to="/" state={{ from: location }} />;
+    // Redirect unauthenticated users trying to access protected pages
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  // Otherwise, display the children of the current route.
   return children;
+};
+
+export default ProtectedRoute;

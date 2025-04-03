@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import libraryBg from "./images/library-4.jpg";
-// import ProtectedRoute from './components/protected-route/protected-route';
+import ProtectedRoute from "./components/protected-route/protected-route";
 import { Header, Footer, Main, Preloader } from "./components/layout/index.ts";
 import {
   Login,
@@ -46,10 +46,12 @@ function App() {
   }, [activeModal]);
 
   // Get full book object for bookId
-  const selectedBook = books.find((book) => book._id === selectedBookId);
-
+  const selectedBook = books.find((book) => {
+    console.log(book._id);
+    book._id === selectedBookId;
+  });
+  console.log(selectedBookId);
   console.log(selectedBook);
-
 
   return (
     <>
@@ -73,6 +75,14 @@ function App() {
                 path="/"
                 element={<Main setBookFormMode={setBookFormMode} />}
               />
+              {/* <Route
+                path="/collection"
+                element={
+                  <ProtectedRoute>
+                    <CollectionPage />
+                  </ProtectedRoute>
+                }
+              ></Route> */}
             </Routes>
           </div>
           <Footer />

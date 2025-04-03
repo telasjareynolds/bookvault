@@ -1,5 +1,4 @@
 import BookItem from "./BookItem";
-import { books } from "../../utils/book-data";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface Book {
@@ -19,7 +18,7 @@ function Main({
 }: {
   setBookFormMode: (mode: "create" | "edit") => void;
 }) {
-  const { openModal } = useAuth();
+  const { openModal, books } = useAuth();
 
   const openCreateModal = () => {
     openModal("configure-book");
@@ -29,14 +28,14 @@ function Main({
   return (
     <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="relative w-full px-6 flex flex-col items-center justify-around sm:flex-row">
-          <h1 className="font-bold m-0 text-4xl leading-6 md:mx-0 md:mt-10 md:mb-8 ">
+        <div className="relative w-full px-6 flex flex-col items-center justify-around gap-4 md:flex-row md:justify-center">
+          <h1 className="font-bold m-0 text-4xl leading-6 md:mx-0 md:mt-10 md:mb-8">
             Explore Library
           </h1>
-          <div className="sm:right-2 sm:absolute ">
+          <div className=" mt-4 md:mt-10 md:mb-8">
             <button
               type="button"
-              className="text-xl font-semibold px-6 py-2 border-2 mt-4 mx-5 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)] sm:mt-10 sm:mb-8 "
+              className="justify-self-end text-xl font-semibold px-6 py-2 border-2 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)]"
               onClick={openCreateModal}
             >
               Create New Book
@@ -67,7 +66,7 @@ function Main({
             {books.map((book: Book) => {
               return (
                 <BookItem
-                  key={book.title}
+                  key={book._id}
                   book={book}
                   setBookFormMode={setBookFormMode}
                   // books={books}

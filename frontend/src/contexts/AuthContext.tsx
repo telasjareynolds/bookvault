@@ -5,7 +5,6 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { books as defaultBooks } from "../utils/book-data";
 import { login, register, getUserProfile } from "../utils";
 import {
   createBookAPI,
@@ -71,6 +70,7 @@ export interface AuthContextType {
   removeFromCollection: (id: string) => void;
   selectedBookId: Book["_id"] | null; // Currently selected book's id
   setSelectedBookId: (id: Book["_id"] | null) => void;
+  isLoggedIn: boolean;
 }
 
 // Create Context
@@ -91,6 +91,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setActiveModal(modal);
   };
   const closeModal = () => setActiveModal("");
+
+  
 
   useEffect(() => {
     const token = getToken();
