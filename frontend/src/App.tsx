@@ -48,9 +48,9 @@ function App() {
   // Get full book object for bookId
   const selectedBook = books.find((book) => {
     console.log(book._id);
+    console.log(selectedBookId);
     book._id === selectedBookId;
   });
-  console.log(selectedBookId);
   console.log(selectedBook);
 
   return (
