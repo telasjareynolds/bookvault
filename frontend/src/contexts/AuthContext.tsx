@@ -77,7 +77,7 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [bookCollection, setBookCollection] = useState<Book[]>(defaultBooks);
+  const [bookCollection, setBookCollection] = useState<Book[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeModal, setActiveModal] = useState("");
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   const closeModal = () => setActiveModal("");
 
-  
+
 
   useEffect(() => {
     const token = getToken();
