@@ -20,15 +20,22 @@ function Register({
 
   const { handleRegister, openModal } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleRegister({
-      email: values.email,
-      name: values.name,
-      password: values.password,
-    });
-    resetForm();
-    openModal("successful-registration");
+  
+    try {
+      await handleRegister({
+        email: String(values.email),
+        name: String(values.name),
+        password: String(values.password),
+      });
+  
+      resetForm();
+      openModal("successful-registration");
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Optionally display an error message to the user here
+    }
   };
 
   const modalInputClassName = `border-b-[1px] border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0 text-black`;

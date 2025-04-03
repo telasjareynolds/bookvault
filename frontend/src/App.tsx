@@ -49,8 +49,7 @@ function App() {
   const selectedBook = books.find((book) => book._id === selectedBookId);
 
   console.log(selectedBook);
-  console.log("Books:", books);
-  console.log("Selected Book ID:", selectedBookId);
+
 
   return (
     <>

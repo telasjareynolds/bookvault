@@ -3,6 +3,7 @@ import { books } from "../../utils/book-data";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface Book {
+  _id: string;
   author?: string;
   country?: string;
   imageLink: string;
@@ -35,7 +36,7 @@ function Main({
           <div className="sm:right-2 sm:absolute ">
             <button
               type="button"
-              className="text-xl font-semibold px-6 py-2 border-2 mt-10 mb-8 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)] "
+              className="text-xl font-semibold px-6 py-2 border-2 mt-4 mx-5 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)] sm:mt-10 sm:mb-8 "
               onClick={openCreateModal}
             >
               Create New Book

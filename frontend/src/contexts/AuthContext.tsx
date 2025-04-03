@@ -9,10 +9,10 @@ import { books as defaultBooks } from "../utils/book-data";
 import { login, register, getUserProfile } from "../utils";
 import {
   createBookAPI,
-  updateBook,
-  deleteBook,
-  addToCollection,
-  removeFromCollection,
+  updateBookAPI,
+  deleteBookAPI,
+  addToCollectionAPI,
+  removeFromCollectionAPI,
   getBookCollection,
   getDefaultBooks,
 } from "../utils";
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoggedIn(true);
 
       const userBooks = await getBookCollection(res.token);
-      setBookCollection(userBooks);
+      setBookCollection(userBooks as Book[]);
 
       return { ...res.user, bookCollection: userBooks };
     } catch (err) {
@@ -185,11 +185,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const createBook = async (bookData: BookInput): Promise<Book> => {
     const token = getToken();
-  
+
     if (!token) {
-      throw new Error("No token found. User must be logged in to create a book.");
+      throw new Error(
+        "No token found. User must be logged in to create a book."
+      );
     }
-  
+
     const newBook = await createBookAPI(bookData, token);
     setBookCollection((prev) => [...prev, newBook]);
     return newBook;
@@ -199,29 +201,53 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     id: string,
     updates: Partial<BookInput>
   ): Promise<Book> => {
-    setSelectedBookId(id);
-    return {
-      _id: id,
-      title: updates.title ?? "Untitled Book",
-      author: updates.author ?? "Unknown",
-      year: updates.year ?? 1900,
-      imageLink: updates.imageLink ?? "placeholder.jpg",
-      language: updates.language ?? "English",
-      pages: updates.pages ?? 100,
-      link: updates.link ?? "#",
-    };
+    const token = getToken();
+    if (!token) throw new Error("No token found.");
+  
+    const updated = await updateBookAPI(id, updates, token);
+    setBookCollection((prev) =>
+      prev.map((book) => (book._id === id ? updated : book))
+    );
+    return updated;
   };
 
-  const deleteBook = async (id: string) => {
-    setSelectedBookId(id);
+  const deleteBook = async (id: string): Promise<void> => {
+    const token = getToken();
+    if (!token) throw new Error("No auth token found.");
+
+    try {
+      await deleteBookAPI(id, token); // your API util
+      setBookCollection((prev) => prev.filter((book) => book._id !== id));
+    } catch (error) {
+      console.error("Failed to delete book:", error);
+      throw error;
+    }
   };
 
-  const addToCollection = (book: Book) => {
-    setBookCollection((prev) => [...prev, book]);
+  const addToCollection = async (book: Book): Promise<void> => {
+    const token = getToken();
+    if (!token) throw new Error("No auth token found.");
+
+    try {
+      const addedBook = await addToCollectionAPI(book, token); // your API util
+      setBookCollection((prev) => [...prev, addedBook]);
+    } catch (error) {
+      console.error("Failed to add book to collection:", error);
+      throw error;
+    }
   };
 
-  const removeFromCollection = (id: string) => {
-    setBookCollection((prev) => prev.filter((book) => book._id !== id));
+  const removeFromCollection = async (id: string): Promise<void> => {
+    const token = getToken();
+    if (!token) throw new Error("No auth token found.");
+
+    try {
+      await removeFromCollectionAPI(id, token); // your API util
+      setBookCollection((prev) => prev.filter((book) => book._id !== id));
+    } catch (error) {
+      console.error("Failed to remove book from collection:", error);
+      throw error;
+    }
   };
 
   return (

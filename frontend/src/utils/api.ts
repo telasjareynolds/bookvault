@@ -2,7 +2,8 @@ import { BASE_URL, request } from "./index";
 import { BookInput } from "../contexts/AuthContext";
 
 export interface BookResponse extends BookInput {
-  owner: string; // added by backend
+  _id: string;  
+  owner: string;
 }
 
 export function getDefaultBooks(): Promise<BookResponse[]> {
@@ -42,7 +43,7 @@ export function createBookAPI(
 }
 
 // Update book
-export function updateBook(
+export function updateBookAPI(
   _id: string,
   updatedBook: Partial<BookInput>,
   token: string
@@ -59,7 +60,7 @@ export function updateBook(
 }
 
 // Delete book
-export function deleteBook(_id: string, token: string): Promise<BookResponse> {
+export function deleteBookAPI(_id: string, token: string): Promise<BookResponse> {
   return request(`${BASE_URL}/${_id}`, {
     method: "DELETE",
     headers: {
@@ -71,7 +72,7 @@ export function deleteBook(_id: string, token: string): Promise<BookResponse> {
 }
 
 // Add to collection
-export function addToCollection(
+export function addToCollectionAPI(
   book: BookInput,
   token: string
 ): Promise<BookResponse> {
@@ -87,7 +88,7 @@ export function addToCollection(
 }
 
 // Remove from collection
-export function removeFromCollection(
+export function removeFromCollectionAPI(
   _id: string,
   token: string
 ): Promise<BookResponse[]> {

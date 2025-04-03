@@ -48,15 +48,22 @@ const BookConfig = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    
+  
     try {
+      const parsedBookData: BookInput = {
+        title: String(values.title),
+        author: values.author ? String(values.author) : undefined,
+        year: Number(values.year),
+        imageLink: String(values.imageLink),
+        link: String(values.link),
+      };
+  
       if (mode === "create") {
-        await createBook(values); // ← Call context method
+        await createBook(parsedBookData);
       } else if (mode === "edit" && selectedBook) {
-        await editBook(selectedBook._id, values);
+        await editBook(selectedBook._id, parsedBookData);
       }
-
+  
       resetForm();
       closeModal();
     } catch (err) {
@@ -75,8 +82,6 @@ const BookConfig = ({
     setSelectedBookId(null);
     closeModal();
   };
-
-  console.log("BookConfig mode:", mode);
 
   const dynamicModalTitle = mode === "edit" ? "Edit Book" : "Create Book";
 
