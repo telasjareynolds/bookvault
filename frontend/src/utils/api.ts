@@ -1,13 +1,15 @@
 import { BASE_URL, request } from "./index";
 import { BookInput } from "../contexts/AuthContext";
 
+const BOOK_BASE_URL = `${BASE_URL}/books`;
+
 export interface BookResponse extends BookInput {
   _id: string;  
   owner: string;
 }
 
 export function getDefaultBooks(): Promise<BookResponse[]> {
-  return request(`${BASE_URL}/`, {
+  return request(`${BOOK_BASE_URL}/`, {
     headers: {
       Accept: "application/json",
 
@@ -17,7 +19,7 @@ export function getDefaultBooks(): Promise<BookResponse[]> {
 }
 
 export function getBookCollection(token: string): Promise<BookResponse[]> {
-  return request(`${BASE_URL}/collection`, {
+  return request(`${BOOK_BASE_URL}/collection`, {
     headers: {
       Accept: "application/json",
       authorization: `Bearer ${token}`,
@@ -31,7 +33,7 @@ export function createBookAPI(
   book: BookInput,
   token: string
 ): Promise<BookResponse> {
-  return request(`${BASE_URL}/`, {
+  return request(`${BOOK_BASE_URL}`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -48,7 +50,7 @@ export function updateBookAPI(
   updatedBook: Partial<BookInput>,
   token: string
 ): Promise<BookResponse> {
-  return request(`${BASE_URL}/${_id}`, {
+  return request(`${BOOK_BASE_URL}/${_id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -61,7 +63,7 @@ export function updateBookAPI(
 
 // Delete book
 export function deleteBookAPI(_id: string, token: string): Promise<BookResponse> {
-  return request(`${BASE_URL}/${_id}`, {
+  return request(`${BOOK_BASE_URL}/${_id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -76,7 +78,7 @@ export function addToCollectionAPI(
   book: BookInput,
   token: string
 ): Promise<BookResponse> {
-  return request(`${BASE_URL}/collection`, {
+  return request(`${BOOK_BASE_URL}/collection`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -92,7 +94,7 @@ export function removeFromCollectionAPI(
   _id: string,
   token: string
 ): Promise<BookResponse[]> {
-  return request(`${BASE_URL}/collection`, {
+  return request(`${BOOK_BASE_URL}/collection`, {
     method: "DELETE",
     headers: {
       authorization: `Bearer ${token}`,

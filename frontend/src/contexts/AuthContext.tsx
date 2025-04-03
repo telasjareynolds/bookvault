@@ -69,7 +69,7 @@ export interface AuthContextType {
   deleteBook: (id: string) => Promise<void>;
   addToCollection: (book: Book) => void;
   removeFromCollection: (id: string) => void;
-  selectedBookId: Book["_id"] | null;
+  selectedBookId: Book["_id"] | null; // Currently selected book's id
   setSelectedBookId: (id: Book["_id"] | null) => void;
 }
 
