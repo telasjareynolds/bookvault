@@ -87,12 +87,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const openModal = (modal: string) => {
-    console.log("Modal button clicked", modal);
     setActiveModal(modal);
   };
   const closeModal = () => setActiveModal("");
-
-
 
   useEffect(() => {
     const token = getToken();
@@ -206,7 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   ): Promise<Book> => {
     const token = getToken();
     if (!token) throw new Error("No token found.");
-  
+
     const updated = await updateBookAPI(id, updates, token);
     setBookCollection((prev) =>
       prev.map((book) => (book._id === id ? updated : book))

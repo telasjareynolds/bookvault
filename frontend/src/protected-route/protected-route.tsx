@@ -1,9 +1,10 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import React from "react";
+import React, { ReactNode } from "react";
+import { Preloader } from "../components";
 
 interface ProtectedRouteProps {
-  children: JSX.Element;
+  children: ReactNode;
   anonymous?: boolean;
   isLoggedInLoading?: boolean;
 }
@@ -17,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const location = useLocation();
   const from = location.state?.from || "/";
 
-  if (isLoggedInLoading) return null;
+  if (isLoggedInLoading) return <Preloader/>;
 
   if (anonymous && isLoggedIn) {
     // Redirect logged-in users away from pages like /login or /register

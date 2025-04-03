@@ -32,7 +32,6 @@ const BookConfig = ({
 
   useEffect(() => {
     if (!isOpen) return;
-
     if (mode === "edit" && selectedBook) {
       resetForm({
         title: selectedBook.title,
