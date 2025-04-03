@@ -13,17 +13,20 @@ import { validateBookId, validateBookData } from "../middleware";
 
 const router = Router();
 
-router.use(authenticate);
-
 // Routes
 router.get("/", getDefaultBooks);
-router.get("/collection", getBookCollection);
-router.post("/", validateBookData, createBook);
-router.put("/:id", validateBookId, updateBook);
-router.delete("/:id", validateBookId, deleteBook);
+router.get("/collection", authenticate, getBookCollection);
+router.post("/", authenticate, validateBookData, createBook);
+router.put("/:id", authenticate, validateBookId, updateBook);
+router.delete("/:id", authenticate, validateBookId, deleteBook);
 
 // Manage user collection
-router.put("/collection", validateBookData, addToCollection);
-router.delete("/collection", validateBookData, removeFromCollection);
+router.put("/collection", authenticate, validateBookData, addToCollection);
+router.delete(
+  "/collection",
+  authenticate,
+  validateBookData,
+  removeFromCollection
+);
 
 export default router;
