@@ -19,12 +19,6 @@ app.use(express.json());
 app.use(clientUse());
 app.use(routeMiddleware);
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use((_req, _res, next) => next());
-} else {
-  app.use(clientUse());
-}
-
 // Test Route
 app.use("/hello", (_req, res) => {
   res.send("Hello World");
@@ -42,7 +36,7 @@ mongoose
   .connect(process.env.MONGODB_URI!)
   .then(() => {
     console.log('Connected to MongoDB');
-    const port = process.env.PORT || 3001;
+    const port = process.env.PORT;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });

@@ -23,7 +23,7 @@ export interface AuthRequest extends Request {
 
 // CRUD
 // Get default books
-export const getDefault = async (
+export const getDefaultBooks = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
