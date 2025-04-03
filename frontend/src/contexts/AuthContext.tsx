@@ -160,6 +160,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userData: Pick<User, "email" | "name"> & { password: string }
   ) => {
     const { email, password, name } = userData;
+    console.log(userData);
 
     if (!email || !password || !name) {
       console.log("Email, password, and username required");

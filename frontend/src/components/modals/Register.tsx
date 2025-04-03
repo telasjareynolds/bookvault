@@ -16,20 +16,20 @@ function Register({
   openLoginModal,
 }: RegisterProps) {
   // how to use the hook
-  const { values, handleChange, errors, resetForm } = useFormWithValidation();
+  const { values, handleChange, errors, resetForm, isValid} = useFormWithValidation();
 
   const { handleRegister, openModal } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
       await handleRegister({
         email: String(values.email),
         name: String(values.name),
         password: String(values.password),
       });
-  
+
       resetForm();
       openModal("successful-registration");
     } catch (error) {
@@ -48,6 +48,7 @@ function Register({
       name={name}
       isOpen={isOpen}
       onSubmit={handleSubmit}
+      isValid={isValid}
     >
       <label className="text-blue-500 mt-6">
         Email *{" "}

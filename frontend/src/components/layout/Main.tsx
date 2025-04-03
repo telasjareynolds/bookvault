@@ -71,9 +71,9 @@ function Main({
                   book={book}
                   setBookFormMode={setBookFormMode}
                   // books={books}
-                  // handleSaveMovie={handleSaveMovie}
+                  // handleSaveBook={handleSaveBook}
                   // isLoggedIn={isLoggedIn}
-                  // savedMovies={savedMovies}
+                  // savedBooks={savedBooks}
                 />
               );
             })}

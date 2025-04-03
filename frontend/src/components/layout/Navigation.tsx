@@ -6,11 +6,7 @@ interface NavigationProps {
   openLogoutModal: () => void;
 }
 
-function Navigation(
-  {
-    openLoginModal, openLogoutModal
-  }: NavigationProps
-) {
+function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
   const { currentUser } = useAuth();
 
   const isLoggedIn = currentUser && currentUser.name;
@@ -28,7 +24,7 @@ function Navigation(
       {isLoggedIn ? (
         <div className="flex items-center gap-3 flex-wrap justify-center">
           <Link
-            to="/saved-movies"
+            to="/saved-books"
             className="transition transform hover:-translate-y-1 hover:text-red-600 hover:text-[20px]"
           >
             {" "}

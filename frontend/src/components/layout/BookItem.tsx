@@ -19,8 +19,8 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
     openModal("configure-book");
   };
 
-  // const isMovieSaved = savedMovies.some(
-  //   (savedMovie) => savedMovie.imdbID === movie.imdbID
+  // const isBookSaved = savedBooks.some(
+  //   (savedBook) => savedBook._idID === Book._idID
   // );
 
   // set card Save on frontend until backend is built
@@ -32,11 +32,11 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
 
   // Logic that allows the default books to attach github's book data URL format while accepting full URLs from other sources
   const imageUrl = book.imageLink.startsWith("http")
-  ? book.imageLink
-  : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
+    ? book.imageLink
+    : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
 
   let isLoggedIn = true;
-  let isMovieSaved = false;
+  let isBookSaved = false;
 
   return (
     <li className="w-[250px] md:w-[200px] lg:w-[225px] relative transition-transform hover:-translate-y-5">
@@ -63,8 +63,8 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
       {isLoggedIn && (
         <>
           <img
-            src={isMovieSaved ? saved : unsaved}
-            alt={isMovieSaved ? "saved" : "not saved"}
+            src={isBookSaved ? saved : unsaved}
+            alt={isBookSaved ? "saved" : "not saved"}
             className="absolute top-4 right-3 h-8 w-8 cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-lg"
             onClick={onBookSave}
           />

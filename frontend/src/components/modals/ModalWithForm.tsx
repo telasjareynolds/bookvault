@@ -1,4 +1,3 @@
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 import { ReactNode, FormEventHandler } from "react";
 import closeBtn from "../../images/close-button.png";
 
@@ -11,6 +10,7 @@ export interface ModalWithFormProps {
   handleModalClose: () => void;
   onSubmit?: FormEventHandler<HTMLFormElement>;
   showSubmitButton?: boolean;
+  isValid?: boolean;
 }
 
 export const ModalWithForm = ({
@@ -21,6 +21,7 @@ export const ModalWithForm = ({
   isOpen,
   handleModalClose,
   onSubmit,
+  isValid,
   showSubmitButton = true,
 }: ModalWithFormProps) => {
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -28,8 +29,6 @@ export const ModalWithForm = ({
       handleModalClose();
     }
   }
-
-  const { isValid } = useFormWithValidation();
 
   return (
     <div
