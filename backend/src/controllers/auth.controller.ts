@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
+import Book from '../models/book.model';
 
 export const register = async (
   req: Request,
@@ -14,6 +15,7 @@ export const register = async (
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      // if there were more time for the assignment I'd use the custom error handlers in the errors folder
       return res.status(400).json({ message: 'User already exists' });
     }
 
@@ -26,6 +28,19 @@ export const register = async (
       password: hashedPassword,
       name,
     });
+
+    // Find all default books (owner is null for default books)
+    const defaultBooks = await Book.find({ owner: null });
+    
+    const booksToAssign = defaultBooks.map((book) => ({
+      // This turns each Mongoose document into a plain JavaScript object so you can safely modify it
+      ...book.toObject(),
+      _id: undefined, // Lets MongoDB remove and create a new unique ID so that each user has their own copy
+      owner: user._id, // Assigns it to the newly created owner, allowing full access
+    }))
+
+    // Inserts all the user's copies of the default books into the database
+    await Book.insertMany(booksToAssign);
 
     // Generate token
     const token = jwt.sign(
@@ -57,7 +72,7 @@ export const login = async (
     const { email, password } = req.body;
 
     // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findUserByCredentials(email, password);
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }

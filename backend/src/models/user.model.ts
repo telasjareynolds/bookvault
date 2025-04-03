@@ -1,4 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
+const bcrypt = require("bcrypt");
+const { UnauthorizedError } = require("../errors/UnauthorizedError");
 
 export interface IUser extends Document {
   email: string;
@@ -20,6 +22,7 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
+      select: false, // Using select to hide password
     },
     name: {
       type: String,
@@ -32,4 +35,30 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-export default mongoose.model<IUser>('User', userSchema); 
+userSchema.statics.findUserByCredentials = function (
+  email: string,
+  password: string
+) {
+  return this.findOne({ email })
+    .select("+password")
+    .then((user: IUser | null) => {
+      if (!user) {
+        throw new UnauthorizedError("Incorrect email or password");
+      }
+
+      return bcrypt.compare(password, user.password).then((matched: boolean) => {
+        if (!matched) {
+          return Promise.reject(
+            new UnauthorizedError("Incorrect email or password")
+          );
+        }
+        return user;
+      });
+    });
+};
+
+export interface UserModel extends mongoose.Model<IUser> {
+  findUserByCredentials(email: string, password: string): Promise<IUser>;
+}
+
+export default mongoose.model<IUser, UserModel>("User", userSchema);

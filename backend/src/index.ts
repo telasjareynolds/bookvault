@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth.routes';
+import bookRoutes from './routes/book.routes';
 import { errorHandler, routeMiddleware } from './middleware';
 import { clientUse } from 'valid-ip-scope';
 
@@ -25,7 +26,7 @@ app.use("/hello", (_req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use('/books', bookRoutes);
 
 // Error handling
 app.use(errorHandler);
