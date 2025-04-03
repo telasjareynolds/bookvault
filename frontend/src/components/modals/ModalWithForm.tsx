@@ -31,8 +31,6 @@ export const ModalWithForm = ({
 
   const { isValid } = useFormWithValidation();
 
-  console.log("Close Button Path:", closeBtn);
-
   return (
     <div
       id="modal-overlay"

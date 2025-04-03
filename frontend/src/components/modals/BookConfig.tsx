@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { ModalWithForm, ModalWithFormProps } from "./ModalWithForm";
-import { Book } from "../../contexts/AuthContext";
+import { Book, BookInput } from "../../contexts/AuthContext";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 
 type BookFormModalProps = ModalWithFormProps & {
@@ -22,15 +22,17 @@ const BookConfig = ({
   const initialValues = {
     title: "",
     author: "",
-    year: 2025,
+    year: "",
     imageLink: "",
     link: "",
   };
 
-  const { values, handleChange, isValid, errors, resetForm } =
+  const { values, handleChange, errors, resetForm } =
     useFormWithValidation(initialValues);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     if (mode === "edit" && selectedBook) {
       resetForm({
         title: selectedBook.title,
@@ -40,19 +42,26 @@ const BookConfig = ({
         link: selectedBook.link,
       });
     } else {
-      resetForm(initialValues); // Clearing the form for "Create" mode
+      resetForm(initialValues);
     }
-  }, [selectedBook, mode, isOpen]);
+  }, [isOpen]); // only on modal open
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (mode === "create") {
-      buttonText = "Create Book";
-    } else if (mode === "edit" && selectedBook) {
-      editBook(selectedBook._id, values);
+
+    
+    try {
+      if (mode === "create") {
+        await createBook(values); // ← Call context method
+      } else if (mode === "edit" && selectedBook) {
+        await editBook(selectedBook._id, values);
+      }
+
+      resetForm();
+      closeModal();
+    } catch (err) {
+      console.error("Error submitting book:", err);
     }
-    resetForm();
-    closeModal();
   };
 
   const handleDelete = () => {
@@ -66,6 +75,8 @@ const BookConfig = ({
     setSelectedBookId(null);
     closeModal();
   };
+
+  console.log("BookConfig mode:", mode);
 
   const dynamicModalTitle = mode === "edit" ? "Edit Book" : "Create Book";
 
@@ -162,6 +173,15 @@ const BookConfig = ({
         />
         {errors.link && <span className="text-red-600">{errors.link}</span>}
       </label>
+      {mode === "edit" && (
+        <button
+          type="button"
+          className="text-[#2f71e5] hover:text-[#2f72e58b] bg-white border-none text-sm font-bold absolute bottom-6 left-0 right-0"
+          onClick={handleDelete}
+        >
+          Delete book
+        </button>
+      )}
     </ModalWithForm>
   );
 };

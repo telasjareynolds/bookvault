@@ -32,8 +32,7 @@ function App() {
   //Stop ESC listener if there are no active modals
   useEffect(() => {
     if (!activeModal) return;
-
-    const handleEscClose = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleEscClose = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closeModal();
       }
@@ -51,8 +50,7 @@ function App() {
 
   console.log(selectedBook);
   console.log("Books:", books);
-console.log("Selected Book ID:", selectedBookId);
-
+  console.log("Selected Book ID:", selectedBookId);
 
   return (
     <>

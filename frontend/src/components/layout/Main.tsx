@@ -28,14 +28,14 @@ function Main({
   return (
     <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">
-        <div className=" relative w-full px-6 flex flex-col items-center justify-center sm:flex-row">
+        <div className="relative w-full px-6 flex flex-col items-center justify-around sm:flex-row">
           <h1 className="font-bold m-0 text-4xl leading-6 md:mx-0 md:mt-10 md:mb-8 ">
             Explore Library
           </h1>
-          <div className="sm:right-48 sm:absolute">
+          <div className="sm:right-2 sm:absolute ">
             <button
               type="button"
-              className="mt-6 text-xl font-semibold px-6 py-2 border-2 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out md:mx-0 md:mt-10 md:mb-8 hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)]"
+              className="text-xl font-semibold px-6 py-2 border-2 mt-10 mb-8 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)] "
               onClick={openCreateModal}
             >
               Create New Book

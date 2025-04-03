@@ -1,23 +1,26 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+export default function ProtectedRoute({
+  children,
+  anonymous = false,
+  isLoggedInLoading,
+}) {
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { currentUser, loading } = useAuth({});
+  const {isLoggedIn}
+  const location = useLocation();
+  const from = location.state?.from || "/";
 
-  if (loading) {
-    return null;
+  if (isLoggedInLoading) return null;
+
+  // If the user is logged in redirect them away from our anonymous routes.
+  if (anonymous && isLoggedIn) {
+    return <Navigate to={from} />;
   }
 
-  if (!currentUser) {
-    return <Navigate to="/welcome" replace />;
+  if (!anonymous && !isLoggedIn) {
+    return <Navigate to="/" state={{ from: location }} />;
   }
 
-  return <>{children}</>;
-};
-
-export default ProtectedRoute;
+  // Otherwise, display the children of the current route.
+  return children;

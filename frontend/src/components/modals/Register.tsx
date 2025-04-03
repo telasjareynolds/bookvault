@@ -18,16 +18,17 @@ function Register({
   // how to use the hook
   const { values, handleChange, errors, resetForm } = useFormWithValidation();
 
-  const { handleRegister } = useAuth();
+  const { handleRegister, openModal } = useAuth();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleRegister({
-      email: "demo@example.com",
-      name: "Demo User",
-      password: "password123",
+      email: values.email,
+      name: values.name,
+      password: values.password,
     });
     resetForm();
+    openModal("successful-registration");
   };
 
   const modalInputClassName = `border-b-[1px] border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0 text-black`;
@@ -57,6 +58,21 @@ function Register({
         {errors.email && <span className="text-red-600">{errors.email}</span>}
       </label>
       <label className="text-blue-500 mt-6">
+        Name *{" "}
+        <input
+          name="name"
+          className={modalInputClassName}
+          id="name"
+          type="text"
+          autoComplete="name"
+          placeholder="Name"
+          onChange={handleChange}
+          value={values.name}
+          minLength={2}
+        />
+        {errors.name && <span className="text-red-600">{errors.name}</span>}
+      </label>
+      <label className="text-blue-500 mt-6">
         Password *{" "}
         <input
           className={modalInputClassName}
@@ -72,21 +88,6 @@ function Register({
         {errors.password && (
           <span className="text-red-600">{errors.password}</span>
         )}
-      </label>
-      <label className="text-blue-500 mt-6">
-        Name *{" "}
-        <input
-          name="name"
-          className={modalInputClassName}
-          id="name"
-          type="text"
-          autoComplete="name"
-          placeholder="Name"
-          onChange={handleChange}
-          value={values.name}
-          minLength={2}
-        />
-        {errors.name && <span className="text-red-600">{errors.name}</span>}
       </label>
       <button
         type="button"

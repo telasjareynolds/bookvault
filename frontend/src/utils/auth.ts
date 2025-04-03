@@ -1,8 +1,17 @@
-import { request } from "./api";
-import { BASE_URL } from "./constants";
+import { BASE_URL, request } from "./index";
+import { User } from "../contexts/AuthContext";
 
-export const authorize = (email, password) => {
-  return request(`${BASE_URL}/signin`, {
+export interface LoginResponse {
+  message: string;
+  token: string;
+  user: User;
+}
+
+export const login = ({
+  email,
+  password,
+}: Partial<User>): Promise<LoginResponse> => {
+  return request(`${BASE_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +23,11 @@ export const authorize = (email, password) => {
   });
 };
 
-export const signup = (email, password, name: username) => {
+export const register = ({
+  email,
+  password,
+  name,
+}: Partial<User>): Promise<LoginResponse> => {
   return request(`${BASE_URL}/register`, {
     method: "POST",
     headers: {
@@ -22,7 +35,7 @@ export const signup = (email, password, name: username) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: username,
+      name,
       email,
       password,
     }),
@@ -31,12 +44,13 @@ export const signup = (email, password, name: username) => {
 
 // get current user
 // Check for user token
-export function getUser(token) {
-  return request(`${BASE_URL}/users/me`, {
+export function getUserProfile(token: string): Promise<User> {
+  return request(`${BASE_URL}/profile`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     },
+
   });
 }
