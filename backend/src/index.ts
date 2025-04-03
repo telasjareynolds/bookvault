@@ -19,6 +19,12 @@ app.use(express.json());
 app.use(clientUse());
 app.use(routeMiddleware);
 
+if (process.env.NODE_ENV !== 'production') {
+  app.use((_req, _res, next) => next());
+} else {
+  app.use(clientUse());
+}
+
 // Test Route
 app.use("/hello", (_req, res) => {
   res.send("Hello World");

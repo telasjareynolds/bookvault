@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 import validator = require("validator");
 
 export interface IBook extends Document {
-  _id: string;
+  _id?: string;
   owner: mongoose.Schema.Types.ObjectId;
   title: string;
   author?: string;

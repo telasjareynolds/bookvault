@@ -22,6 +22,25 @@ export interface AuthRequest extends Request {
 }
 
 // CRUD
+// Get default books
+export const getDefault = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+
+  try {
+    const books = await Book.find({ owner: null});
+    const formatted = books.map((book) => ({
+      ...book.toObject(),
+      _id: uuidv4(), // guarantees string
+    }));
+    return res.status(200).json(formatted);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get User's collected books
 export const getBookCollection = async (
   req: AuthRequest,
