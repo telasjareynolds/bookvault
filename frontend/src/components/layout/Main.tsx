@@ -38,7 +38,7 @@ function Main({
   return (
     <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">
-      <div className="relative w-full px-6 flex flex-col items-center justify-around gap-4 md:flex-row md:items-center md:justify-between md:px-10">
+      <div className="relative w-full px-[100px] flex flex-col items-center justify-around gap-4 md:flex-row md:items-center md:justify-between 2xl:px-[400px] ">
         <h1 className="font-bold m-0 text-4xl leading-6 md:mr-auto md:mt-10 md:mb-8 text-center md:text-left mx-auto md:mx-0">
           Explore Library
         </h1>
