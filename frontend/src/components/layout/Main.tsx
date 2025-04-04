@@ -35,8 +35,6 @@ function Main({
     setVisibleCount((prev) => prev + 10);
   };
 
-  console.log(books)
-
   return (
     <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">

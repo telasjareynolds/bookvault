@@ -18,16 +18,20 @@ const BookConfig = ({
 }: BookFormModalProps) => {
   const { createBook, editBook, deleteBook, closeModal, setSelectedBookId } =
     useAuth();
+    
+    const imageUrl = selectedBook?.imageLink.startsWith("http")
+    ? selectedBook.imageLink
+    : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${selectedBook?.imageLink}`;
 
   const initialValues = {
     title: "",
     author: "",
     year: "",
     imageLink: "",
-    // link?: "",
+    link: "",
   };
 
-  const requiredFields = ["title", "year", "imageLink"];
+  const requiredFields = ["title", "year", "imageLink", "link"];
 
   const { values, handleChange, errors, resetForm, isValid } =
     useFormWithValidation(initialValues, requiredFields);
@@ -39,8 +43,8 @@ const BookConfig = ({
         title: selectedBook.title,
         author: selectedBook.author || "",
         year: selectedBook.year,
-        imageLink: selectedBook.imageLink,
-        // link?: selectedBook.link,
+        imageLink: imageUrl,
+        link: selectedBook.link || "",
       });
     } else {
       resetForm(initialValues);
@@ -55,7 +59,7 @@ const BookConfig = ({
         title: String(values.title),
         author: values.author ? String(values.author) : undefined,
         year: Number(values.year),
-        imageLink: String(values.imageLink),
+        imageLink: String(imageUrl),
         link: String(values.link),
       };
 
@@ -87,6 +91,7 @@ const BookConfig = ({
   const dynamicModalTitle = mode === "edit" ? "Edit Book" : "Create Book";
 
   const modalInputClassName = `border-b-[1px] border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0 text-black`;
+
 
   return (
     <ModalWithForm

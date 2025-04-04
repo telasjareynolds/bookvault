@@ -12,7 +12,7 @@ import {
   deleteBookAPI,
   addToCollectionAPI,
   removeFromCollectionAPI,
-  getBookCollection,
+  getUserProfileBooks,
   getDefaultBooks,
 } from "../utils";
 import { getToken, setToken, removeToken } from "../utils";
@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     if (token) {
-      Promise.all([getUserProfile(token), getBookCollection(token)])
+      Promise.all([getUserProfile(token), getUserProfileBooks(token)])
         .then(([user, userBooks]) => {
           setCurrentUser(user);
           setBookCollection(userBooks); // Already includes duplicated defaults
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setCurrentUser(res.user);
       setIsLoggedIn(true);
 
-      const userBooks = await getBookCollection(res.token);
+      const userBooks = await getUserProfileBooks(res.token);
       setBookCollection(userBooks as Book[]);
 
       return {

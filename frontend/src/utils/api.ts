@@ -4,8 +4,7 @@ import { BookInput } from "../contexts/AuthContext";
 const BOOK_BASE_URL = `${BASE_URL}/books`;
 
 export interface BookResponse extends BookInput {
-  _id: string;  
-  owner: string;
+  _id: string;
 }
 
 export function getDefaultBooks(): Promise<BookResponse[]> {
@@ -18,8 +17,8 @@ export function getDefaultBooks(): Promise<BookResponse[]> {
   });
 }
 
-export function getBookCollection(token: string): Promise<BookResponse[]> {
-  return request(`${BOOK_BASE_URL}/collection`, {
+export function getUserProfileBooks(token: string): Promise<BookResponse[]> {
+  return request(`${BOOK_BASE_URL}/`, {
     headers: {
       Accept: "application/json",
       authorization: `Bearer ${token}`,
@@ -62,7 +61,10 @@ export function updateBookAPI(
 }
 
 // Delete book
-export function deleteBookAPI(_id: string, token: string): Promise<BookResponse> {
+export function deleteBookAPI(
+  _id: string,
+  token: string
+): Promise<BookResponse> {
   return request(`${BOOK_BASE_URL}/${_id}`, {
     method: "DELETE",
     headers: {
@@ -101,5 +103,14 @@ export function removeFromCollectionAPI(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ _id }),
+  });
+}
+
+export function getAddedCollection(token: string): Promise<BookResponse[]> {
+  return request(`${BOOK_BASE_URL}/collection`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   });
 }
