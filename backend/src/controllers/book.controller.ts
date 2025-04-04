@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import Book from "../models/book.model";
 import {
@@ -40,8 +40,8 @@ export const getDefaultBooks = async (
   }
 };
 
-// Get User's collected books
-export const getBookCollection = async (
+// Get User's books specific to their profile
+export const getUserProfileBooks = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -50,7 +50,9 @@ export const getBookCollection = async (
     throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
   }
   try {
-    const books = await Book.find({ owner: req.user.userId });
+    const owner = new Types.ObjectId(req.user.userId);
+
+    const books = await Book.find({ owner });
     const formatted = books.map((book) => ({
       ...book.toObject(),
       _id: uuidv4(), // guarantees string
@@ -80,7 +82,7 @@ export const createBook = async (
       year,
       imageLink,
       link,
-      owner: req.user.userId,
+      owner: new Types.ObjectId(req.user.userId),
     });
 
     res.status(201).json(book);
@@ -97,15 +99,14 @@ export const updateBook = async (
   if (!req.user) {
     throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
   }
+  const owner = new Types.ObjectId(req.user.userId);
 
-  console.log("UPDATE BOOK: userId =", new mongoose.Types.ObjectId(req.user.userId), "bookId =", req.params.id);
-
+  console.log("Looking for book with id:", req.params.id, "and owner:", owner);
   try {
-    
     const book = await Book.findOneAndUpdate(
       {
         _id: req.params.id,
-        owner: new mongoose.Types.ObjectId(req.user.userId),
+        owner,
       },
       req.body,
       { new: true }
@@ -128,10 +129,12 @@ export const deleteBook = async (
     throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
   }
 
+  const owner = new Types.ObjectId(req.user.userId);
+
   try {
     const book = await Book.findOneAndDelete({
       _id: req.params.id,
-      owner: req.user.userId,
+      owner,
     });
 
     if (!book) {
@@ -154,7 +157,7 @@ export const addToCollection = async (
   }
 
   const { _id, title, author, year, imageLink, link } = req.body;
-  const owner = req.user.userId;
+  const owner = new Types.ObjectId(req.user.userId);
 
   if (!_id) {
     throw new BadRequestError(ID_BADREQUEST_MSG);
@@ -187,7 +190,7 @@ export const removeFromCollection = async (
   }
 
   const { _id } = req.body;
-  const owner = req.user.userId;
+  const owner = new Types.ObjectId(req.user.userId);
 
   if (!_id) {
     throw new BadRequestError(ID_BADREQUEST_MSG);
@@ -209,5 +212,26 @@ export const removeFromCollection = async (
     } else {
       next(error);
     }
+  }
+};
+
+// Route to view list of all books in user's collection
+export const getBookCollection = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const owner = new Types.ObjectId(req.user.userId); // ensures proper match
+    const books = await Book.find({ owner });
+
+    res.status(200).json(books);
+  } catch (error) {
+    next(error);
   }
 };

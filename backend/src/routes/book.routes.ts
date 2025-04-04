@@ -1,12 +1,13 @@
 import { Router } from "express";
 import {
-  getBookCollection,
+  getUserProfileBooks,
   createBook,
   updateBook,
   deleteBook,
   addToCollection,
   removeFromCollection,
   getDefaultBooks,
+  getBookCollection
 } from "../controllers/book.controller";
 import { authenticate } from "../middleware/auth.middleware";
 import { validateBookId, validateBookData } from "../middleware";
@@ -15,7 +16,7 @@ const router = Router();
 
 // Routes
 router.get("/", getDefaultBooks);
-router.get("/collection", authenticate, getBookCollection);
+router.get("/", authenticate, getUserProfileBooks);
 router.post("/", authenticate, validateBookData, createBook);
 router.put("/:id", authenticate, validateBookId, updateBook);
 router.delete("/:id", authenticate, validateBookId, deleteBook);
@@ -28,5 +29,6 @@ router.delete(
   validateBookData,
   removeFromCollection
 );
+router.get("/collection", authenticate, getBookCollection);
 
 export default router;
