@@ -69,8 +69,7 @@ export const validateBookData = celebrate({
       "string.empty": 'The "imageLink" must be provided',
       "string.uri": 'The "imageLink" must be a valid URL',
     }),
-    link: Joi.string().required().custom(validateURL).messages({
-      "string.empty": 'The "link" must be provided',
+    link: Joi.string().optional().custom(validateURL).messages({
       "string.uri": 'The "link" must be a valid URL',
     }),
     language: Joi.string().optional(),

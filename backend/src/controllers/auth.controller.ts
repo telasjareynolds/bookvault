@@ -16,7 +16,7 @@ export const register = async (
 ) => {
   try {
     const { email, password, name } = req.body;
-    
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -24,22 +24,21 @@ export const register = async (
       res.status(400).json({ message: "User already exists" });
       return;
     }
-    
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
-    
+
     // Create new user
     const user = await User.create({
       email,
       password: hashedPassword,
       name,
     });
-    
+
     // Find all default books (owner is null for default books)
     const defaultBooks = await Book.find({ owner: null }).lean<IBook[]>();
-    
+
     const booksToAssign = defaultBooks.map((book) => {
-      
       // This turns each Mongoose document into a plain JavaScript object so you can safely modify it
       const { _id, imageLink, ...rest } = book; // Strip _id and pull out links
       return {
@@ -47,7 +46,7 @@ export const register = async (
         _id: uuidv4(), // Assigns it to the newly created owner, allowing full access
         owner: user._id as Types.ObjectId,
         // Ensure valid image URL
-        imageLink: imageLink?.startsWith("http")
+        imageLink: imageLink?.startsWith("https")
           ? imageLink
           : `${GITHUB_BASE}${imageLink}`,
         // Ensure valid link (optional – only if you're also storing link this way)
