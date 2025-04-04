@@ -34,6 +34,7 @@ export interface Book {
   language?: string;
   pages?: number;
   link?: string;
+  owner?: string;
 }
 
 export interface UserWithCollection extends User {
@@ -107,11 +108,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         })
         .catch((err) => {
           console.error("Auth check failed", err);
-          removeToken();
           setCurrentUser(null);
 
           // fallback to public default books if token invalid
-          getDefaultBooks().then(setBookCollection);
+          getDefaultBooks().then((defaultBooks) => {
+            setBookCollection(defaultBooks);
+          });
         })
         .finally(() => setIsLoading(false));
     } else {
@@ -164,7 +166,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userData: Pick<User, "email" | "name"> & { password: string }
   ) => {
     const { email, password, name } = userData;
-    console.log(userData);
 
     if (!email || !password || !name) {
       console.log("Email, password, and username required");
@@ -199,7 +200,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const newBook = await createBookAPI(bookData, token);
-    setBookCollection((prev) => [...prev, newBook]);
+    setBookCollection((prev) => [newBook, ...prev ]);
     return newBook;
   };
 
@@ -236,7 +237,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const addedBook = await addToCollectionAPI(book, token); // your API util
-  
+
       setBookCollection((prev) => [...prev, addedBook]);
     } catch (error) {
       console.error("Failed to add book to collection:", error);

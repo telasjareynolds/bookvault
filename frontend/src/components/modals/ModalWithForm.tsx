@@ -1,5 +1,6 @@
 import { ReactNode, FormEventHandler } from "react";
 import closeBtn from "../../images/close-button.png";
+import { useAuth } from "../../contexts/AuthContext";
 
 export interface ModalWithFormProps {
   children?: ReactNode;
@@ -7,7 +8,7 @@ export interface ModalWithFormProps {
   buttonText?: string;
   title: string;
   isOpen: boolean;
-  handleModalClose: () => void;
+  handleModalClose?: () => void;
   onSubmit?: FormEventHandler<HTMLFormElement>;
   showSubmitButton?: boolean;
   isValid?: boolean;
@@ -24,9 +25,13 @@ export const ModalWithForm = ({
   isValid,
   showSubmitButton = true,
 }: ModalWithFormProps) => {
+
+  const { closeModal } = useAuth();
+  const onClose = handleModalClose || closeModal;
+
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if ((e.target as HTMLElement).id === "modal-overlay") {
-      handleModalClose();
+      closeModal();
     }
   }
 
@@ -43,7 +48,7 @@ export const ModalWithForm = ({
       <div className="relative bg-white text-black min-w-60 border rounded-3xl border-black padding pt-5 px-10 pb-16 sm:min-w-96">
         <h2 className="p-0 mx-0 mb-0 mt-7">{title}</h2>
         <button
-          onClick={handleModalClose}
+          onClick={onClose}
           type="button"
           className="absolute top-4 right-6 w-5 h-6 bg-no-repeat bg-contain bg-center transition-transform duration-200 ease-in-out hover:scale-125"
           style={{ backgroundImage: `url(${closeBtn})` }}

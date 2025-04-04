@@ -8,19 +8,19 @@ type ConfirmDeleteProps = ModalWithFormProps & {
 
 function ConfirmDelete({
   isOpen = true,
-  handleModalClose,
   name,
   title,
   bookId,
+  handleModalClose,
 }: ConfirmDeleteProps) {
-  const { deleteBook } = useAuth();
+  const { deleteBook, closeModal } = useAuth();
 
   if (!bookId) return null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     deleteBook(bookId);
-    handleModalClose();
+    closeModal();
   };
 
   return (

@@ -16,10 +16,10 @@ const BookConfig = ({
   selectedBook,
   buttonText,
 }: BookFormModalProps) => {
-  const { createBook, editBook, deleteBook, closeModal, setSelectedBookId } =
+  const { createBook, editBook, closeModal, setSelectedBookId, openModal } =
     useAuth();
-    
-    const imageUrl = selectedBook?.imageLink.startsWith("http")
+
+  const imageUrl = selectedBook?.imageLink
     ? selectedBook.imageLink
     : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${selectedBook?.imageLink}`;
 
@@ -31,13 +31,14 @@ const BookConfig = ({
     link: "",
   };
 
-  const requiredFields = ["title", "year", "imageLink", "link"];
+  const requiredFields = ["title", "year", "imageLink"];
 
   const { values, handleChange, errors, resetForm, isValid } =
     useFormWithValidation(initialValues, requiredFields);
 
   useEffect(() => {
     if (!isOpen) return;
+
     if (mode === "edit" && selectedBook) {
       resetForm({
         title: selectedBook.title,
@@ -46,10 +47,12 @@ const BookConfig = ({
         imageLink: imageUrl,
         link: selectedBook.link || "",
       });
-    } else {
-      resetForm(initialValues);
     }
-  }, [isOpen]); // only on modal open
+
+    if (mode === "create" && Object.values(values).every((val) => val === "")) {
+      resetForm(initialValues); // Only reset if user hasn't typed anything yet
+    }
+  }, [isOpen, selectedBook]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,12 +62,13 @@ const BookConfig = ({
         title: String(values.title),
         author: values.author ? String(values.author) : undefined,
         year: Number(values.year),
-        imageLink: String(imageUrl),
-        link: String(values.link),
+        imageLink: String(values.imageLink),
+        link: values.link ? String(values.link) : undefined,
       };
 
       if (mode === "create") {
         await createBook(parsedBookData);
+        console.log(parsedBookData);
       } else if (mode === "edit" && selectedBook) {
         await editBook(selectedBook._id, parsedBookData);
       }
@@ -78,20 +82,19 @@ const BookConfig = ({
 
   const handleDelete = () => {
     if (selectedBook) {
-      deleteBook(selectedBook._id);
-      closeModal();
+      openModal("confirm-delete");
     }
   };
 
   const handleCloseEditModal = () => {
     setSelectedBookId(null);
+    resetForm(initialValues); // clear it out cleanly
     closeModal();
   };
 
   const dynamicModalTitle = mode === "edit" ? "Edit Book" : "Create Book";
 
   const modalInputClassName = `border-b-[1px] border-black mx-0 mt-2 mb-1 flex flex-col w-full px-0 pt-2 pb-0 text-black`;
-
 
   return (
     <ModalWithForm
@@ -118,7 +121,11 @@ const BookConfig = ({
           minLength={2}
           required
         />
-        {errors.title && <span className="text-red-600 text-wrap max-w-fit">{errors.title}</span>}
+        {errors.title && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.title}
+          </span>
+        )}
       </label>
       <label className="text-blue-500 mt-6">
         Year *{" "}
@@ -134,7 +141,11 @@ const BookConfig = ({
           onChange={handleChange}
           className={modalInputClassName}
         />
-        {errors.year && <span className="text-red-600 text-wrap max-w-fit">{errors.year}</span>}
+        {errors.year && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.year}
+          </span>
+        )}
       </label>
       <label className="text-blue-500 mt-6">
         Author (optional){" "}
@@ -149,7 +160,11 @@ const BookConfig = ({
           value={values.author}
           minLength={2}
         />
-        {errors.author && <span className="text-red-600 text-wrap max-w-fit">{errors.author}</span>}
+        {errors.author && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.author}
+          </span>
+        )}
       </label>
       <label className="text-blue-500 mt-6">
         Image Link *{" "}
@@ -166,11 +181,13 @@ const BookConfig = ({
           required
         />
         {errors.imageLink && (
-          <span className="text-red-600 text-wrap max-w-fit">{errors.imageLink}</span>
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.imageLink}
+          </span>
         )}
       </label>
       <label className="text-blue-500 mt-6">
-        Link to book's Wikipedia page *{" "}
+        Link to book's Wikipedia page (optional){" "}
         <input
           name="link"
           className={modalInputClassName}
@@ -182,7 +199,11 @@ const BookConfig = ({
           value={values.link}
           minLength={2}
         />
-        {errors.link && <span className="text-red-600 text-wrap max-w-fit">{errors.link}</span>}
+        {errors.link && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.link}
+          </span>
+        )}
       </label>
       {mode === "edit" && (
         <button

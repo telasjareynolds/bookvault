@@ -11,7 +11,8 @@ interface BookItemProps {
 }
 
 function BookItem({ book, setBookFormMode }: BookItemProps) {
-  const { openModal, setSelectedBookId, addToCollection } = useAuth();
+  const { openModal, setSelectedBookId, addToCollection, isLoggedIn } =
+    useAuth();
 
   const handleOpenEditModal = () => {
     setBookFormMode("edit");
@@ -25,7 +26,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
 
   // set card Save on frontend until backend is built
 
-  function onBookSave(e: React.MouseEvent<HTMLImageElement>) {
+  function onAddToCollection(e: React.MouseEvent<HTMLImageElement>) {
     e.preventDefault();
     addToCollection(book);
   }
@@ -38,14 +39,11 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
   //   "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/";
 
   // Logic that allows the default books to attach github's book data URL format while accepting full URLs from other sources
-  const imageUrl = book.imageLink.startsWith("http")
+  const imageUrl = book.imageLink.startsWith("https")
     ? book.imageLink
     : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
 
-    console.log("MY IMAGE URL", imageUrl)
-
-  let isLoggedIn = true;
-  let isBookSaved = false;
+   let isBookSaved = true;
 
   return (
     <li className="w-[250px] md:w-[200px] lg:w-[225px] relative transition-transform hover:-translate-y-5">
@@ -75,7 +73,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
             src={isBookSaved ? saved : unsaved}
             alt={isBookSaved ? "saved" : "not saved"}
             className="absolute top-4 right-3 h-8 w-8 cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-lg"
-            onClick={onBookSave}
+            onClick={onAddToCollection}
           />
           <img
             src={editBtn}
