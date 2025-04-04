@@ -30,6 +30,13 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
     addToCollection(book);
   }
 
+  // imageLink: imageLink?.startsWith("http")
+  // ? imageLink
+  // : `${GITHUB_BASE}${imageLink}`,
+
+  // const GITHUB_BASE =
+  //   "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/";
+
   // Logic that allows the default books to attach github's book data URL format while accepting full URLs from other sources
   const imageUrl = book.imageLink.startsWith("http")
     ? book.imageLink

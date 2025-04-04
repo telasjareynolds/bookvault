@@ -12,7 +12,8 @@ function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
   const isLoggedIn = currentUser && currentUser.name;
 
   return (
-    <nav className="flex items-center gap-3 text-lg flex-wrap justify-center text-white px-2">
+    <nav className="flex items-center gap-5
+     text-lg flex-wrap justify-center text-white px-2">
       <Link to="/">
         <button
           className="transition transform hover:-translate-y-1 hover:text-red-600 hover:text-[20px]"
@@ -22,7 +23,7 @@ function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
         </button>
       </Link>
       {isLoggedIn ? (
-        <div className="flex items-center gap-3 flex-wrap justify-center">
+        <div className="flex items-center gap-5 flex-wrap justify-center">
           <Link
             to="/saved-books"
             className="transition transform hover:-translate-y-1 hover:text-red-600 hover:text-[20px]"
@@ -36,7 +37,7 @@ function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
             onClick={openLogoutModal}
           >
             {" "}
-            Welcome Back, {currentUser.name}
+           Logout
           </button>
         </div>
       ) : (

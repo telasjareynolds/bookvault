@@ -18,7 +18,7 @@ function RegistrationSuccessful({
       isOpen={isOpen}
       showSubmitButton={false}
     >
-      <button type="button" onClick={openLoginModal} className="absolute bottom-[46px] left-[42px] text-[#2f71e5] hover:text-[#2f72e58b] bg-white border-none text-[20px] font-bold font-[BonaNova] px-0 py-0 w-fit">
+      <button type="button" onClick={openLoginModal} className="absolute bottom-7 left-[42px] text-[#2f71e5] hover:text-[#2f72e58b] border-none text-[20px] font-bold font-[BonaNova] px-0 py-0 w-fit">
         Sign in
       </button>
     </ModalWithForm>

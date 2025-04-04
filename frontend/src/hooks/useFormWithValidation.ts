@@ -4,22 +4,20 @@ export interface FormValues {
   [key: string]: string | number;
 }
 
-export function useFormWithValidation(initialValues: FormValues = {}) {
-  const [values, setValues] = useState<FormValues>({
-    email: "",
-    name: "",
-    password: "",
-    ...initialValues,
-  });
+export function useFormWithValidation(
+  initialValues: FormValues = {},
+  requiredFields: string[] = []
+) {
+  const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isValid, setIsValid] = useState(false);
 
-  // Run validation on every value change
   useEffect(() => {
-    const formIsValid = Object.values(errors).every((error) => error === "") &&
-      Object.values(values).every((val) => val !== "");
+    const formIsValid =
+      requiredFields.every((field) => values[field] !== "") &&
+      Object.values(errors).every((error) => error === "");
     setIsValid(formIsValid);
-  }, [errors, values]);
+  }, [errors, values, requiredFields]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, validationMessage, validity } = e.target;
@@ -38,7 +36,7 @@ export function useFormWithValidation(initialValues: FormValues = {}) {
   }
 
   function resetForm(
-    newValues: FormValues = {},
+    newValues: FormValues = initialValues,
     newErrors: Record<string, string> = {},
     newIsValid = false
   ) {

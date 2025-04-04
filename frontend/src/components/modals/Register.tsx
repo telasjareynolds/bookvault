@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ModalWithForm, ModalWithFormProps } from "./ModalWithForm.js";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation.js";
 import { useAuth } from "../../contexts/AuthContext.js";
@@ -16,12 +17,23 @@ function Register({
   openLoginModal,
 }: RegisterProps) {
   // how to use the hook
-  const { values, handleChange, errors, resetForm, isValid} = useFormWithValidation();
+
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const registerInitialValues = {
+    email: "",
+    name: "",
+    password: "",
+  };
+
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormWithValidation(registerInitialValues, ["email", "name", "password"]);
 
   const { handleRegister, openModal } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitError(null);
 
     try {
       await handleRegister({
@@ -32,9 +44,17 @@ function Register({
 
       resetForm();
       openModal("successful-registration");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration failed:", error);
-      // Optionally display an error message to the user here
+      // Check for "user already exists" from backend
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.message === "User already exists"
+      ) {
+        setSubmitError("A user with this email already exists.");
+      } else {
+        setSubmitError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -63,7 +83,14 @@ function Register({
           value={values.email}
           minLength={6}
         />
-        {errors.email && <span className="text-red-600">{errors.email}</span>}
+        {errors.email && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.email}
+          </span>
+        )}{" "}
+        {submitError && (
+          <span className="text-red-600 text-sm">{submitError}</span>
+        )}
       </label>
       <label className="text-blue-500 mt-6">
         Name *{" "}
@@ -78,7 +105,11 @@ function Register({
           value={values.name}
           minLength={2}
         />
-        {errors.name && <span className="text-red-600">{errors.name}</span>}
+        {errors.name && (
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.name}
+          </span>
+        )}{" "}
       </label>
       <label className="text-blue-500 mt-6">
         Password *{" "}
@@ -94,8 +125,10 @@ function Register({
           minLength={8}
         />
         {errors.password && (
-          <span className="text-red-600">{errors.password}</span>
-        )}
+          <span className="text-red-600 text-wrap max-w-fit">
+            {errors.password}
+          </span>
+        )}{" "}
       </label>
       <button
         type="button"

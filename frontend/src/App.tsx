@@ -50,8 +50,6 @@ function App() {
     return book._id === selectedBookId;
   });
 
-  console.log(selectedBook);
-
   return (
     <>
       {isLoading ? (

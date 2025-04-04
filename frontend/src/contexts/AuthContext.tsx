@@ -33,7 +33,7 @@ export interface Book {
   imageLink: string;
   language?: string;
   pages?: number;
-  link: string;
+  link?: string;
 }
 
 export interface UserWithCollection extends User {
@@ -48,7 +48,7 @@ export interface BookInput {
   imageLink: string;
   language?: string;
   pages?: number;
-  link: string;
+  link?: string;
 }
 
 export interface AuthContextType {
@@ -58,10 +58,12 @@ export interface AuthContextType {
   activeModal: string;
   openModal: (modal: string) => void;
   closeModal: () => void;
-  handleLogin: (email: string, password: string) => Promise<UserWithCollection>;
+  handleLogin: (
+    userData: Pick<User, "email"> & { password: string }
+  ) => Promise<UserWithCollection | void>;
   handleRegister: (
-    userData: Partial<User> & { password: string }
-  ) => Promise<UserWithCollection>;
+    userData: Pick<User, "email" | "name"> & { password: string }
+  ) => Promise<UserWithCollection | void>;
   logout: () => void;
   createBook: (bookData: BookInput) => Promise<Book>;
   editBook: (id: string, updates: Partial<BookInput>) => Promise<Book>;
@@ -125,20 +127,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogin = async (
     userData: Pick<User, "email"> & { password: string }
-  ) => {
+  ): Promise<UserWithCollection | void> => {
     setIsLoading(true);
 
     const { email, password } = userData;
 
     if (!email || !password) {
       console.log("Email and password are required");
+      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const res = await login(userData);
+      const res = await login(userData); // login() should accept { email, password }
+
       setToken(res.token);
       setCurrentUser(res.user);
       setIsLoggedIn(true);
@@ -146,7 +148,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userBooks = await getBookCollection(res.token);
       setBookCollection(userBooks as Book[]);
 
-      return { ...res.user, bookCollection: userBooks };
+      return {
+        ...res.user,
+        bookCollection: userBooks,
+      };
     } catch (err) {
       console.error("Login failed:", err);
       throw err;
@@ -181,6 +186,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     removeToken();
     setIsLoggedIn(false);
     setCurrentUser(null);
+    closeModal();
   };
 
   const createBook = async (bookData: BookInput): Promise<Book> => {

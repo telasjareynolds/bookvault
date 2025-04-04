@@ -24,11 +24,13 @@ const BookConfig = ({
     author: "",
     year: "",
     imageLink: "",
-    link: "",
+    // link?: "",
   };
 
-  const { values, handleChange, errors, resetForm } =
-    useFormWithValidation(initialValues);
+  const requiredFields = ["title", "year", "imageLink"];
+
+  const { values, handleChange, errors, resetForm, isValid } =
+    useFormWithValidation(initialValues, requiredFields);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -38,7 +40,7 @@ const BookConfig = ({
         author: selectedBook.author || "",
         year: selectedBook.year,
         imageLink: selectedBook.imageLink,
-        link: selectedBook.link,
+        // link?: selectedBook.link,
       });
     } else {
       resetForm(initialValues);
@@ -47,7 +49,7 @@ const BookConfig = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
       const parsedBookData: BookInput = {
         title: String(values.title),
@@ -56,13 +58,13 @@ const BookConfig = ({
         imageLink: String(values.imageLink),
         link: String(values.link),
       };
-  
+
       if (mode === "create") {
         await createBook(parsedBookData);
       } else if (mode === "edit" && selectedBook) {
         await editBook(selectedBook._id, parsedBookData);
       }
-  
+
       resetForm();
       closeModal();
     } catch (err) {
@@ -94,6 +96,7 @@ const BookConfig = ({
       isOpen={isOpen}
       handleModalClose={handleCloseEditModal}
       buttonText={buttonText}
+      isValid={isValid}
     >
       {" "}
       <label className="text-blue-500 mt-6">
@@ -110,7 +113,7 @@ const BookConfig = ({
           minLength={2}
           required
         />
-        {errors.title && <span className="text-red-600">{errors.title}</span>}
+        {errors.title && <span className="text-red-600 text-wrap max-w-fit">{errors.title}</span>}
       </label>
       <label className="text-blue-500 mt-6">
         Year *{" "}
@@ -126,7 +129,7 @@ const BookConfig = ({
           onChange={handleChange}
           className={modalInputClassName}
         />
-        {errors.year && <span className="text-red-600">{errors.year}</span>}
+        {errors.year && <span className="text-red-600 text-wrap max-w-fit">{errors.year}</span>}
       </label>
       <label className="text-blue-500 mt-6">
         Author (optional){" "}
@@ -141,7 +144,7 @@ const BookConfig = ({
           value={values.author}
           minLength={2}
         />
-        {errors.author && <span className="text-red-600">{errors.author}</span>}
+        {errors.author && <span className="text-red-600 text-wrap max-w-fit">{errors.author}</span>}
       </label>
       <label className="text-blue-500 mt-6">
         Image Link *{" "}
@@ -158,7 +161,7 @@ const BookConfig = ({
           required
         />
         {errors.imageLink && (
-          <span className="text-red-600">{errors.imageLink}</span>
+          <span className="text-red-600 text-wrap max-w-fit">{errors.imageLink}</span>
         )}
       </label>
       <label className="text-blue-500 mt-6">
@@ -173,9 +176,8 @@ const BookConfig = ({
           onChange={handleChange}
           value={values.link}
           minLength={2}
-          required
         />
-        {errors.link && <span className="text-red-600">{errors.link}</span>}
+        {errors.link && <span className="text-red-600 text-wrap max-w-fit">{errors.link}</span>}
       </label>
       {mode === "edit" && (
         <button
