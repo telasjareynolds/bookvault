@@ -2,13 +2,13 @@ import mongoose, { Document, Schema } from "mongoose";
 import validator = require("validator");
 
 export interface IBook extends Document {
-  _id?: string;
+  _id: string;
   owner: mongoose.Schema.Types.ObjectId;
   title: string;
   author?: string;
   year: number;
   imageLink: string;
-  link: string;
+  link?: string;
 }
 
 const bookSchema = new Schema<IBook>({
@@ -48,13 +48,7 @@ const bookSchema = new Schema<IBook>({
   },
   link: {
     type: String,
-    required: true,
-    validate: {
-      validator(v: string) {
-        return validator.isURL(v);
-      },
-      message: "You must enter a valid URL",
-    },
+    required: false,
   },
 });
 

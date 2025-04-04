@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model";
-import Book from "../models/book.model";
+import Book, { IBook } from "../models/book.model";
+import { v4 as uuidv4 } from "uuid";
+
+const GITHUB_BASE =
+  "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/";
 
 export const register = async (
   req: Request,
@@ -16,7 +20,8 @@ export const register = async (
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       // if there were more time for the assignment I'd use the custom error handlers in the errors folder
-      return res.status(400).json({ message: "User already exists" });
+      res.status(400).json({ message: "User already exists" });
+      return;
     }
 
     // Hash password
@@ -30,17 +35,25 @@ export const register = async (
     });
 
     // Find all default books (owner is null for default books)
-    const defaultBooks = await Book.find({ owner: null });
+    const defaultBooks = await Book.find({ owner: null }).lean<IBook[]>();
+    console.log("Log defaultBooks", defaultBooks)
+
     const booksToAssign = defaultBooks.map((book) => {
-        // This turns each Mongoose document into a plain JavaScript object so you can safely modify it
-      const { _id, ...rest } = book.toObject();   // This turns each Mongoose document into a plain JavaScript object so you can safely modify it
+      // This turns each Mongoose document into a plain JavaScript object so you can safely modify it
+      const { _id, imageLink, ...rest } = book; // Strip _id and pull out links
       return {
         ...rest,
-        owner: user._id, // Assigns it to the newly created owner, allowing full access
+        _id: uuidv4(), // Assigns it to the newly created owner, allowing full access
+        owner: user._id,
+        // Ensure valid image URL
+        imageLink: imageLink?.startsWith("http")
+          ? imageLink
+          : `${GITHUB_BASE}${imageLink}`,
+        // Ensure valid link (optional – only if you're also storing link this way)
+        //link: link?.startsWith("http") ? link : link,
       };
     });
 
-    console.log("Books being inserted for user:", booksToAssign)
     // Inserts all the user's copies of the default books into the database
     await Book.insertMany(booksToAssign);
 
@@ -59,12 +72,10 @@ export const register = async (
       },
     });
   } catch (error) {
-    console.error("Registration error:", error); 
+    console.error("Registration error:", error);
     res
       .status(500)
       .json({ message: "Something went wrong during registration." });
-
-    next(error);
   }
 };
 
@@ -79,13 +90,15 @@ export const login = async (
     // Find user
     const user = await User.findUserByCredentials(email, password);
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
     }
 
     // Check password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
     }
 
     // Generate token
@@ -115,7 +128,7 @@ export const getProfile = async (
   try {
     const user = await User.findById(req.user?.userId).select("-password");
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
     }
 
     res.json(user);

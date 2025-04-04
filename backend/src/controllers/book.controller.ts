@@ -28,14 +28,13 @@ export const getDefaultBooks = async (
   res: Response,
   next: NextFunction
 ) => {
-
   try {
-    const books = await Book.find({ owner: null});
+    const books = await Book.find({ owner: null });
     const formatted = books.map((book) => ({
       ...book.toObject(),
       _id: uuidv4(), // guarantees string
     }));
-    return res.status(200).json(formatted);
+    res.status(200).json(formatted);
   } catch (error) {
     next(error);
   }
@@ -56,7 +55,7 @@ export const getBookCollection = async (
       ...book.toObject(),
       _id: uuidv4(), // guarantees string
     }));
-    return res.status(200).json(formatted);
+    res.status(200).json(formatted);
   } catch (error) {
     next(error);
   }
@@ -84,7 +83,7 @@ export const createBook = async (
       owner: req.user.userId,
     });
 
-    return res.status(201).json(book);
+    res.status(201).json(book);
   } catch (error) {
     next(error);
   }
@@ -99,11 +98,14 @@ export const updateBook = async (
     throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
   }
 
+  console.log("UPDATE BOOK: userId =", new mongoose.Types.ObjectId(req.user.userId), "bookId =", req.params.id);
+
   try {
+    
     const book = await Book.findOneAndUpdate(
       {
         _id: req.params.id,
-        owner: req.user.userId,
+        owner: new mongoose.Types.ObjectId(req.user.userId),
       },
       req.body,
       { new: true }
@@ -111,7 +113,7 @@ export const updateBook = async (
     if (!book) {
       throw new NotFoundError(NOTFOUND_ERROR_MSG);
     }
-    return res.status(200).json(book);
+    res.status(200).json(book);
   } catch (error) {
     next(error);
   }
@@ -135,7 +137,7 @@ export const deleteBook = async (
     if (!book) {
       throw new NotFoundError(NOTFOUND_ERROR_MSG);
     }
-    return res.status(200).json({ message: "Book deleted successfully" });
+    res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     next(error);
   }
@@ -164,7 +166,7 @@ export const addToCollection = async (
       { _id, title, author, year, imageLink, link },
       { upsert: true, new: true }
     );
-    return res.status(200).json(book);
+    res.status(200).json(book);
   } catch (error) {
     if (error instanceof mongoose.Error.CastError) {
       return next(new BadRequestError(ID_BADREQUEST_MSG));
@@ -198,7 +200,7 @@ export const removeFromCollection = async (
     }
 
     await Book.findOneAndDelete({ _id, owner });
-    return res
+    res
       .status(200)
       .json({ message: "Book removed from collection successfully" });
   } catch (error) {
