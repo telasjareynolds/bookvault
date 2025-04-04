@@ -32,10 +32,10 @@ export const getDefaultBooks = async (
     const books = await Book.find({ owner: null });
     const formatted = books.map((book) => ({
       ...book.toObject(),
-      _id: uuidv4(), // guarantees string
     }));
     res.status(200).json(formatted);
   } catch (error) {
+    console.error("Error getting default books: " + error);
     next(error);
   }
 };
@@ -55,7 +55,6 @@ export const getUserProfileBooks = async (
     const books = await Book.find({ owner });
     const formatted = books.map((book) => ({
       ...book.toObject(),
-      _id: uuidv4(), // guarantees string
     }));
     res.status(200).json(formatted);
   } catch (error) {
@@ -101,9 +100,8 @@ export const updateBook = async (
   }
   const updateData = { ...req.body };
   delete updateData.owner;
-  const owner = new Types.ObjectId(req.user.userId);
+  const owner = req.user.userId;
 
-  console.log("Looking for book with id:", req.params.id, "and owner:", owner);
   try {
     const book = await Book.findOneAndUpdate(
       {

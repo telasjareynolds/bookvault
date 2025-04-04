@@ -37,7 +37,6 @@ export const register = async (
     
     // Find all default books (owner is null for default books)
     const defaultBooks = await Book.find({ owner: null }).lean<IBook[]>();
-    console.log("Log defaultBooks", defaultBooks)
     
     const booksToAssign = defaultBooks.map((book) => {
       
