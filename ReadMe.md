@@ -8,7 +8,8 @@ A full stack application that allows users to manage their personal book collect
 
 - User authentication (via provided backend codebase)
 - Add, edit, and delete books
-- View a list of all saved books
+- Remove and add books to collection
+- View a list of all books added to user's collection
 - Responsive, modern UI built with React + Vite + TypeScript
 - API built with Express and TypeScript
 - MongoDB for persistent data storage
@@ -68,7 +69,7 @@ npm install
 3. Environment Variables
    In the backend/ folder, create a .env file with the following content:
    PORT=3001
-   MONGO_URI=mongodb://localhost:27017/bookmanager
+   MONGO_URI=mongodb://localhost:27017/bookvault
    JWT_SECRET=your_jwt_secret
 
 Replace your_jwt_secret with a secure secret key for JWT.
