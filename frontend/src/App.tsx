@@ -9,6 +9,7 @@ import {
   Main,
   Preloader,
   UserCollection,
+  About,
 } from "./components/layout/index.ts";
 import {
   Login,
@@ -101,6 +102,7 @@ function App() {
                   </ProtectedRoute>
                 }
               ></Route>
+              <Route path="/about" element={<About />} />
             </Routes>
           </div>
           <Footer />
