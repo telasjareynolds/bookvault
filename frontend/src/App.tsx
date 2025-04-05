@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import libraryBg from "./images/library-4.jpg";
-import ProtectedRoute from "./components/protected-route/protected-route";
-import { Header, Footer, Main, Preloader } from "./components/layout/index.ts";
+import ProtectedRoute from "./protected-route/protected-route.tsx";
+import {
+  Header,
+  Footer,
+  Main,
+  Preloader,
+  UserCollection,
+} from "./components/layout/index.ts";
 import {
   Login,
   RegistrationSuccessful,
@@ -16,10 +23,9 @@ import { useAuth } from "./contexts/AuthContext.tsx";
 function App() {
   const [bookFormMode, setBookFormMode] = useState<"create" | "edit">("create");
   const {
-
     books,
     logout,
-   
+
     openModal,
     closeModal,
     activeModal,
@@ -42,6 +48,23 @@ function App() {
       document.removeEventListener("keydown", handleEscClose);
     };
   }, [activeModal]);
+
+  // For making sure user stays on their current route
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Save the current route whenever it changes
+  useEffect(() => {
+    localStorage.setItem("lastRoute", location.pathname);
+  }, [location]);
+
+  //  On mount, redirect to saved route (but only once)
+  useEffect(() => {
+    const lastRoute = localStorage.getItem("lastRoute");
+    if (lastRoute && window.location.pathname === "/") {
+      navigate(lastRoute, { replace: true });
+    }
+  }, []);
 
   // Get full book object for bookId
   const selectedBook = books.find((book) => {
@@ -70,14 +93,14 @@ function App() {
                 path="/"
                 element={<Main setBookFormMode={setBookFormMode} />}
               />
-              {/* <Route
-                path="/collection"
+              <Route
+                path="/saved-books"
                 element={
                   <ProtectedRoute>
-                    <CollectionPage />
+                    <UserCollection setBookFormMode={setBookFormMode} />
                   </ProtectedRoute>
                 }
-              ></Route> */}
+              ></Route>
             </Routes>
           </div>
           <Footer />

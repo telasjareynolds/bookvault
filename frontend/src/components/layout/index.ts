@@ -4,3 +4,4 @@ export { default as Footer } from "./Footer";
 export { default as Main } from "./Main";
 export { default as BookItem } from "./BookItem";
 export { default as Preloader } from "./Preloader";
+export { default as UserCollection } from "./userCollection";

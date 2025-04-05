@@ -76,7 +76,6 @@ export function addToCollectionAPI(
       authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ _id }),
   });
 }
 

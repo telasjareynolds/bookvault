@@ -3,47 +3,36 @@ import BookItem from "./BookItem";
 import { useAuth } from "../../contexts/AuthContext";
 import { Book } from "../../contexts/AuthContext";
 
-function Main({
+function UserCollection({
   setBookFormMode,
 }: {
   setBookFormMode: (mode: "create" | "edit") => void;
 }) {
-  const { openModal, books } = useAuth();
-
-  const openCreateModal = () => {
-    openModal("configure-book");
-    setBookFormMode("create");
-  };
+  const { savedBooks, currentUser, books } = useAuth();
 
   // Logic that controls the state of the default books
   const [visibleCount, setVisibleCount] = useState(10);
   // Books will be loaded 10 at a time and then on click of handleSeeMore button, add 10 more to the initial 10 so that all 100 books are not rendering on page load
-  const visibleBooks = books.slice(0, visibleCount);
+
+  const fullSavedBooks = books.filter((book) => savedBooks.includes(book._id)).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
+  const visibleBooks = fullSavedBooks.slice(0, visibleCount);
 
   const handleSeeMore = () => {
     setVisibleCount((prev) => prev + 10);
   };
 
   return (
-    <main className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
+    <section className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="relative w-full px-[100px] flex flex-col items-center justify-around gap-4 md:flex-row md:items-center md:justify-between 2xl:px-[400px] ">
-          <h1 className="font-bold m-0 text-4xl leading-6 md:mr-auto md:mt-10 md:mb-8 text-center md:text-left mx-auto md:mx-0">
-            Explore Library
+        <div className="relative w-full flex flex-col items-center justify-center gap-4 md:flex-row md:items-center  ">
+          <h1 className="font-bold m-0 mb-4 text-4xl leading-6 md:mb-8 text-center ">
+            {`${currentUser?.name}'s Collection`}
           </h1>
-          <div className="mt-4 md:mt-10 md:mb-8 md:ml-auto">
-            <button
-              type="button"
-              className="text-xl font-semibold px-6 py-2 border-2 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)]"
-              onClick={openCreateModal}
-            >
-              Create New Book
-            </button>
-          </div>
         </div>
-        {!books || books.length === 0 ? (
+        {!savedBooks || savedBooks.length === 0 ? (
           <p className="text-4xl text-red-600 text-cetner mt-24">
-            No books found.
+            No books are saved to your collection!
           </p>
         ) : (
           <>
@@ -64,14 +53,10 @@ function Main({
     xl:grid-cols-5"
             >
               {visibleBooks.map((book: Book) => (
-                <BookItem
-                  key={book._id}
-                  book={book}
-                  setBookFormMode={setBookFormMode}
-                />
+                <BookItem key={book._id} book={book} setBookFormMode={setBookFormMode}/>
               ))}
             </ul>
-            {visibleCount < books.length && (
+            {visibleCount < savedBooks.length && (
               <button
                 onClick={handleSeeMore}
                 className="mb-8 text-xl font-semibold px-6 py-2 border-2 border-black rounded-full bg-white text-black shadow-md hover:-translate-y-1 hover:text-red-600 hover:bg-black transition-all duration-300 ease-in-out hover:shadow-[0_4px_20px_rgba(255,0,0,0.5)]"
@@ -82,8 +67,8 @@ function Main({
           </>
         )}
       </div>
-    </main>
+    </section>
   );
 }
 
-export default Main;
+export default UserCollection;

@@ -11,39 +11,30 @@ interface BookItemProps {
 }
 
 function BookItem({ book, setBookFormMode }: BookItemProps) {
-  const { openModal, setSelectedBookId, isLoggedIn, savedBooks, toggleLike } =
+  const { openModal, setSelectedBookId, isLoggedIn, savedBooks, toggleSave } =
     useAuth();
 
   const handleOpenEditModal = () => {
-    setBookFormMode("edit");
-    setSelectedBookId(book._id);
-    openModal("configure-book");
+    if (setBookFormMode) {
+      setBookFormMode("edit");
+      setSelectedBookId(book._id);
+      openModal("configure-book");
+    }
   };
 
-  // const isBookSaved = savedBooks.some(
-  //   (savedBook) => savedBook._idID === Book._idID
-  // );
+  const isBookSaved = savedBooks.includes(book._id);
+  console.log(isBookSaved);
 
-  // set card Save on frontend until backend is built
-
+  // Toggle saved book
   function onToggleLike(e: React.MouseEvent<HTMLImageElement>) {
     e.preventDefault();
-    toggleLike(book);
+    toggleSave(book._id);
   }
-
-  // imageLink: imageLink?.startsWith("http")
-  // ? imageLink
-  // : `${GITHUB_BASE}${imageLink}`,
-
-  // const GITHUB_BASE =
-  //   "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/";
 
   // Logic that allows the default books to attach github's book data URL format while accepting full URLs from other sources
   const imageUrl = book.imageLink.startsWith("https")
     ? book.imageLink
     : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
-
-   let isBookSaved = true;
 
   return (
     <li className="w-[250px] md:w-[200px] lg:w-[225px] relative transition-transform hover:-translate-y-5">

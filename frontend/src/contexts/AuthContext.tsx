@@ -39,6 +39,8 @@ export interface Book {
   pages?: number;
   link?: string;
   owner?: string;
+  country?: string;
+  updatedAt: string | number | Date;
 }
 
 export interface UserWithCollection extends User {
@@ -76,7 +78,7 @@ export interface AuthContextType {
   selectedBookId: Book["_id"] | null; // Currently selected book's id
   setSelectedBookId: (id: Book["_id"] | null) => void;
   isLoggedIn: boolean;
-  toggleLike: (bookId: string) => Promise<void>;
+  toggleSave: (bookId: string) => Promise<void>;
   savedBooks: string[];
 }
 
