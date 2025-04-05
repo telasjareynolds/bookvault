@@ -16,12 +16,10 @@ import { useAuth } from "./contexts/AuthContext.tsx";
 function App() {
   const [bookFormMode, setBookFormMode] = useState<"create" | "edit">("create");
   const {
-    currentUser,
-    handleLogin,
-    handleRegister,
+
     books,
     logout,
-    deleteBook,
+   
     openModal,
     closeModal,
     activeModal,

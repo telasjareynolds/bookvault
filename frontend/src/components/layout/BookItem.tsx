@@ -11,7 +11,7 @@ interface BookItemProps {
 }
 
 function BookItem({ book, setBookFormMode }: BookItemProps) {
-  const { openModal, setSelectedBookId, addToCollection, isLoggedIn } =
+  const { openModal, setSelectedBookId, isLoggedIn, savedBooks, toggleLike } =
     useAuth();
 
   const handleOpenEditModal = () => {
@@ -26,9 +26,9 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
 
   // set card Save on frontend until backend is built
 
-  function onAddToCollection(e: React.MouseEvent<HTMLImageElement>) {
+  function onToggleLike(e: React.MouseEvent<HTMLImageElement>) {
     e.preventDefault();
-    addToCollection(book);
+    toggleLike(book);
   }
 
   // imageLink: imageLink?.startsWith("http")
@@ -73,7 +73,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
             src={isBookSaved ? saved : unsaved}
             alt={isBookSaved ? "saved" : "not saved"}
             className="absolute top-4 right-3 h-8 w-8 cursor-pointer transition-transform duration-300 transform hover:scale-125 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-lg"
-            onClick={onAddToCollection}
+            onClick={onToggleLike}
           />
           <img
             src={editBtn}

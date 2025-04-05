@@ -5,8 +5,11 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { login, register, getUserProfile } from "../utils";
+
 import {
+  login,
+  register,
+  getUserProfile,
   createBookAPI,
   updateBookAPI,
   deleteBookAPI,
@@ -23,6 +26,7 @@ export interface User {
   password?: string;
   name: string;
   id: string;
+  savedBooks?: { _id: string }[];
 }
 
 export interface Book {
@@ -64,16 +68,16 @@ export interface AuthContextType {
   ) => Promise<UserWithCollection | void>;
   handleRegister: (
     userData: Pick<User, "email" | "name"> & { password: string }
-  ) => Promise<UserWithCollection | void>;
+  ) => Promise<User | void>;
   logout: () => void;
   createBook: (bookData: BookInput) => Promise<Book>;
   editBook: (id: string, updates: Partial<BookInput>) => Promise<Book>;
   deleteBook: (id: string) => Promise<void>;
-  addToCollection: (book: Book) => void;
-  removeFromCollection: (id: string) => void;
   selectedBookId: Book["_id"] | null; // Currently selected book's id
   setSelectedBookId: (id: Book["_id"] | null) => void;
   isLoggedIn: boolean;
+  toggleLike: (bookId: string) => Promise<void>;
+  savedBooks: string[];
 }
 
 // Create Context
@@ -88,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     null
   );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [savedBooks, setSavedBooks] = useState<string[]>([]);
 
   const openModal = (modal: string) => {
     setActiveModal(modal);
@@ -104,6 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .then(([user, userBooks]) => {
           setCurrentUser(user);
           setBookCollection(userBooks); // Already includes duplicated defaults
+          setSavedBooks(user.savedBooks?.map((book) => book._id) || []);
           setIsLoggedIn(true);
         })
         .catch((err) => {
@@ -200,7 +206,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const newBook = await createBookAPI(bookData, token);
-    setBookCollection((prev) => [newBook, ...prev ]);
+    setBookCollection((prev) => [newBook, ...prev]);
     return newBook;
   };
 
@@ -231,30 +237,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const addToCollection = async (book: Book): Promise<void> => {
+  const toggleSave = async (bookId: string) => {
     const token = getToken();
-    if (!token) throw new Error("No auth token found.");
 
-    try {
-      const addedBook = await addToCollectionAPI(book, token); // your API util
-
-      setBookCollection((prev) => [...prev, addedBook]);
-    } catch (error) {
-      console.error("Failed to add book to collection:", error);
-      throw error;
+    if (!token) {
+      throw new Error("No token found. User must be logged in to like a book.");
     }
-  };
 
-  const removeFromCollection = async (id: string): Promise<void> => {
-    const token = getToken();
-    if (!token) throw new Error("No auth token found.");
+    const isSaved = savedBooks.includes(bookId);
 
     try {
-      await removeFromCollectionAPI(id, token); // your API util
-      setBookCollection((prev) => prev.filter((book) => book._id !== id));
-    } catch (error) {
-      console.error("Failed to remove book from collection:", error);
-      throw error;
+      if (isSaved) {
+        await removeFromCollectionAPI(bookId, token);
+      } else {
+        await addToCollectionAPI(bookId, token);
+      }
+
+      setSavedBooks((prev) =>
+        isSaved ? prev.filter((id) => id !== bookId) : [bookId, ...prev]
+      );
+    } catch (err) {
+      console.error("Toggle like failed", err);
     }
   };
 
@@ -273,11 +276,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         createBook,
         editBook,
         deleteBook,
-        addToCollection,
-        removeFromCollection,
         selectedBookId,
         setSelectedBookId,
         isLoggedIn,
+        savedBooks,
+        toggleSave,
       }}
     >
       {" "}
