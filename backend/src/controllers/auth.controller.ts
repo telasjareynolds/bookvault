@@ -162,6 +162,7 @@ export const addToCollection = async (
 
   try {
     const bookId = req.params.id;
+
     if (!bookId) {
       throw new BadRequestError(ID_BADREQUEST_MSG);
     }
@@ -170,7 +171,8 @@ export const addToCollection = async (
       req.user!.userId,
       { $addToSet: { savedBooks: bookId } }, // setting this way to prevent duplicates
       { new: true }
-    ).populate("savedBooks");
+    )
+    .populate("savedBooks");
     if (!user) {
       throw new NotFoundError(NOTFOUND_ERROR_MSG);
     }

@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 
@@ -8,7 +8,7 @@ export interface IUser extends Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  savedBooks: Types.ObjectId[];
+  savedBooks: string[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -30,7 +30,7 @@ const userSchema = new Schema<IUser>(
       required: true,
       trim: true,
     },
-    savedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+    savedBooks: [{ type: String, ref: "Book" }],
   },
   {
     timestamps: true,
