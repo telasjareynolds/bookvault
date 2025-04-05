@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
-const bcrypt = require("bcrypt");
-const { UnauthorizedError } = require("../errors/UnauthorizedError");
+import mongoose, { Document, Schema, Types } from "mongoose";
+import bcrypt from "bcrypt";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
 
 export interface IUser extends Document {
   email: string;
@@ -8,6 +8,7 @@ export interface IUser extends Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
+  savedBooks: Types.ObjectId[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -29,6 +30,7 @@ const userSchema = new Schema<IUser>(
       required: true,
       trim: true,
     },
+    savedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
   },
   {
     timestamps: true,
@@ -46,14 +48,16 @@ userSchema.statics.findUserByCredentials = function (
         throw new UnauthorizedError("Incorrect email or password");
       }
 
-      return bcrypt.compare(password, user.password).then((matched: boolean) => {
-        if (!matched) {
-          return Promise.reject(
-            new UnauthorizedError("Incorrect email or password")
-          );
-        }
-        return user;
-      });
+      return bcrypt
+        .compare(password, user.password)
+        .then((matched: boolean) => {
+          if (!matched) {
+            return Promise.reject(
+              new UnauthorizedError("Incorrect email or password")
+            );
+          }
+          return user;
+        });
     });
 };
 

@@ -1,15 +1,8 @@
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import Book from "../models/book.model";
+import { NotFoundError, UnauthorizedError } from "../errors/index";
 import {
-  BadRequestError,
-  ForbiddenError,
-  NotFoundError,
-  UnauthorizedError,
-} from "../errors/index";
-import {
-  ID_BADREQUEST_MSG,
-  FORBIDDEN_ERROR_MSG,
   UNAUTHENTICATED_ERROR_MSG,
   NOTFOUND_ERROR_MSG,
 } from "../utils/constants";
@@ -141,96 +134,6 @@ export const deleteBook = async (
       throw new NotFoundError(NOTFOUND_ERROR_MSG);
     }
     res.status(200).json({ message: "Book deleted successfully" });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// Add book to user's collection
-export const addToCollection = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.user) {
-    throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
-  }
-
-  const { _id, title, author, year, imageLink, link } = req.body;
-  const owner = new Types.ObjectId(req.user.userId);
-
-  if (!_id) {
-    throw new BadRequestError(ID_BADREQUEST_MSG);
-  }
-
-  try {
-    const book = await Book.findOneAndUpdate(
-      { _id, owner },
-      { _id, title, author, year, imageLink, link },
-      { upsert: true, new: true }
-    );
-    res.status(200).json(book);
-  } catch (error) {
-    if (error instanceof mongoose.Error.CastError) {
-      return next(new BadRequestError(ID_BADREQUEST_MSG));
-    } else {
-      next(error);
-    }
-  }
-};
-
-// Remove book from collection
-export const removeFromCollection = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.user) {
-    throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
-  }
-
-  const { _id } = req.body;
-  const owner = new Types.ObjectId(req.user.userId);
-
-  if (!_id) {
-    throw new BadRequestError(ID_BADREQUEST_MSG);
-  }
-
-  try {
-    const book = await Book.findOne({ _id, owner });
-    if (!book) {
-      throw new ForbiddenError(FORBIDDEN_ERROR_MSG);
-    }
-
-    await Book.findOneAndDelete({ _id, owner });
-    res
-      .status(200)
-      .json({ message: "Book removed from collection successfully" });
-  } catch (error) {
-    if (error instanceof mongoose.Error.CastError) {
-      return next(new BadRequestError(ID_BADREQUEST_MSG));
-    } else {
-      next(error);
-    }
-  }
-};
-
-// Route to view list of all books in user's collection
-export const getBookCollection = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    if (!req.user) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-
-    const owner = new Types.ObjectId(req.user.userId); // ensures proper match
-    const books = await Book.find({ owner }).sort({ createdAt: -1 });
-
-    res.status(200).json(books);
   } catch (error) {
     next(error);
   }

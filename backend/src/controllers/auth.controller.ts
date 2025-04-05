@@ -1,10 +1,20 @@
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model";
 import Book, { IBook } from "../models/book.model";
 import { v4 as uuidv4 } from "uuid";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../errors/index";
+import {
+  ID_BADREQUEST_MSG,
+  UNAUTHENTICATED_ERROR_MSG,
+  NOTFOUND_ERROR_MSG,
+} from "../utils/constants";
 
 const GITHUB_BASE =
   "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/";
@@ -126,13 +136,84 @@ export const getProfile = async (
   next: NextFunction
 ) => {
   try {
-    const user = await User.findById(req.user?.userId).select("-password");
+    const user = await User.findById(req.user?.userId)
+      .select("-password")
+      .populate("savedBooks");
     if (!user) {
       res.status(404).json({ message: "User not found" });
+      return;
     }
 
     res.json(user);
   } catch (error) {
     next(error);
+  }
+};
+
+// Add book to user's collection
+export const addToCollection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
+  }
+
+  try {
+    const bookId = req.params.id;
+    if (!bookId) {
+      throw new BadRequestError(ID_BADREQUEST_MSG);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user!.userId,
+      { $addToSet: { savedBooks: bookId } }, // setting this way to prevent duplicates
+      { new: true }
+    ).populate("savedBooks");
+    if (!user) {
+      throw new NotFoundError(NOTFOUND_ERROR_MSG);
+    }
+    res.status(200).json(user.savedBooks);
+  } catch (error) {
+    if (error instanceof mongoose.Error.CastError) {
+      return next(new BadRequestError(ID_BADREQUEST_MSG));
+    } else {
+      next(error);
+    }
+  }
+};
+
+// Remove book from collection
+export const removeFromCollection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
+  }
+
+  try {
+    const bookId = req.params.id;
+    if (!bookId) {
+      throw new BadRequestError(ID_BADREQUEST_MSG);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user!.userId,
+      { $pull: { savedBooks: bookId } }, // $pull: remove bookId from savedBooks array and avoid duplicates
+      { new: true }
+    ).populate("savedBooks");
+    if (!user) {
+      throw new NotFoundError(NOTFOUND_ERROR_MSG);
+    }
+    res.status(200).json(user.savedBooks);
+  } catch (error) {
+    if (error instanceof mongoose.Error.CastError) {
+      return next(new BadRequestError(ID_BADREQUEST_MSG));
+    } else {
+      next(error);
+    }
   }
 };
