@@ -11,18 +11,7 @@ import Book from './models/book.model';
 dotenv.config();
 
 const app = express();
-
-async function setOwnerFieldForDefaultBooks() {
-  try {
-    const result = await Book.updateMany(
-      { owner: { $exists: false } },
-      { $set: { owner: null } }
-    );
-    console.log(`Set owner: null on ${result.modifiedCount} legacy books.`);
-  } catch (error) {
-    console.error("Error updating books:", error);
-  }
-}
+const router = Router();
 
 // Middleware
 app.use(cors());
