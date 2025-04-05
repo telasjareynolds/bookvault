@@ -52,7 +52,7 @@ export const getUserProfileBooks = async (
   try {
     const owner = new Types.ObjectId(req.user.userId);
 
-    const books = await Book.find({ owner });
+    const books = await Book.find({ owner }).sort({ createdAt: -1 });
     const formatted = books.map((book) => ({
       ...book.toObject(),
     }));
@@ -228,7 +228,7 @@ export const getBookCollection = async (
     }
 
     const owner = new Types.ObjectId(req.user.userId); // ensures proper match
-    const books = await Book.find({ owner });
+    const books = await Book.find({ owner }).sort({ createdAt: -1 });
 
     res.status(200).json(books);
   } catch (error) {

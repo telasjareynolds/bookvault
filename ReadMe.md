@@ -74,7 +74,11 @@ npm install
 
 Replace your_jwt_secret with a secure secret key for JWT.
 
-4. Run the Application
+4. Use this link to download the default JSON books that are set up to appear correctly throughout this project. Import them into mongodb and make sure the database is connected: https://github.com/telasjareynolds/book-file/blob/main/bookvault.books.json
+
+-- For reference, this file originally came from "https://github.com/benoitvallon/100-best-books/blob/master/books.json" but I've converted the value of id into strings for the project.
+
+5. Run the Application
 
 Start the backend server-
 cd backend

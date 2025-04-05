@@ -50,6 +50,8 @@ const bookSchema = new Schema<IBook>({
     type: String,
     required: false,
   },
+}, {
+  timestamps: true, 
 });
 
 bookSchema.index({ _id: 1, owner: 1 }, { unique: true });
