@@ -72,7 +72,5 @@ export const validateBookData = celebrate({
     link: Joi.string().optional().custom(validateURL).messages({
       "string.uri": 'The "link" must be a valid URL',
     }),
-    language: Joi.string().optional(),
-    pages: Joi.number().optional(),
   }),
 });

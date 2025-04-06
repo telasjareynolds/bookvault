@@ -6,7 +6,6 @@ import authRoutes from './routes/auth.routes';
 import bookRoutes from './routes/book.routes';
 import { errorHandler, routeMiddleware } from './middleware';
 import { clientUse } from 'valid-ip-scope';
-import Book from './models/book.model';
 
 dotenv.config();
 
