@@ -1,6 +1,6 @@
 # 📚 Book Management App
 
-A full stack application that allows users to manage their personal book collection. Built with React, Vite, TypeScript, Express, and MongoDB, the app enables users to securely add, edit, delete, and view books in their library with authentication.
+A full stack application that allows users to manage their personal book collection. Built with React, Vite, TypeScript, Express, and MongoDB, the app enables users to securely add, edit, delete, and view books in their library with authentication. Each user will get a copy of 100 books to browse upon registration and configure or remove if desired.
 
 ---
 
