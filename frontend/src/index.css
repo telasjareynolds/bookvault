@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional: Your global styles here */
 @font-face {
   font-family: "BonaNova";
   src: url("./vendor/fonts/BonaNovaSC-Regular.ttf") format("truetype");

@@ -108,6 +108,7 @@ function App() {
           <Footer />
         </>
       )}
+     {/* Modals  */} 
       <Register
         handleModalClose={closeModal}
         isOpen={activeModal === "register"}
