@@ -3,19 +3,13 @@ import { ModalWithForm, ModalWithFormProps } from "./ModalWithForm.js";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation.js";
 import { useAuth } from "../../contexts/AuthContext.js";
 
-// Using props from form
-type RegisterProps = ModalWithFormProps & {
-  openLoginModal: () => void;
-};
-
 function Register({
   handleModalClose,
   title,
   name,
   isOpen,
   buttonText,
-  openLoginModal,
-}: RegisterProps) {
+}: ModalWithFormProps) {
   // how to use the hook
 
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -133,7 +127,7 @@ function Register({
       <button
         type="button"
         className="text-[#2f71e5] hover:text-[#2f72e58b] bg-white border-none text-sm font-bold absolute bottom-10 left-0 right-0"
-        onClick={openLoginModal}
+        onClick={() => openModal("login")}
       >
         or Log In
       </button>

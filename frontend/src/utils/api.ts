@@ -5,13 +5,13 @@ const BOOK_BASE_URL = `${BASE_URL}/books`;
 
 export interface BookResponse extends BookInput {
   _id: string;
+  updatedAt: string | number | Date; 
 }
 
 export function getDefaultBooks(): Promise<BookResponse[]> {
   return request(`${BOOK_BASE_URL}/`, {
     headers: {
       Accept: "application/json",
-
       "Content-Type": "application/json",
     },
   });

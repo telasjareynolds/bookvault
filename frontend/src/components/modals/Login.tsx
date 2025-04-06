@@ -3,18 +3,8 @@ import { ModalWithForm, ModalWithFormProps } from "./ModalWithForm";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation.js";
 import { useAuth } from "../../contexts/AuthContext.js";
 
-// Using props from form
-type LoginProps = ModalWithFormProps & {
-  openRegisterModal: () => void;
-};
-
-function Login({
-  handleModalClose,
-  openRegisterModal,
-  isOpen,
-  buttonText,
-}: LoginProps) {
-  const { handleLogin, closeModal } = useAuth();
+function Login({ handleModalClose, isOpen, buttonText }: ModalWithFormProps) {
+  const { handleLogin, closeModal, openModal } = useAuth();
   // how to use the hook
 
   const loginInitialValues = {
@@ -96,7 +86,7 @@ function Login({
         <button
           type="button"
           className="text-[#2f71e5] hover:text-[#2f72e58b] bg-white border-none text-sm font-bold absolute bottom-10 left-0 right-0"
-          onClick={openRegisterModal}
+          onClick={() => openModal("register")}
         >
           or Sign Up
         </button>

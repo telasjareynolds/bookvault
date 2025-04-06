@@ -86,6 +86,7 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  // State management
   const [bookCollection, setBookCollection] = useState<Book[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,10 +97,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [savedBooks, setSavedBooks] = useState<string[]>([]);
 
+  // Opens modals
   const openModal = (modal: string) => {
     setActiveModal(modal);
   };
+
+  // Closes modals
   const closeModal = () => setActiveModal("");
+
+  // Checks if there's a token/logged in user on pageload and sets books
 
   useEffect(() => {
     const token = getToken();
@@ -185,6 +191,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return res.user;
     } catch (err) {
+      console.error("Unable to register:", err);
       throw err;
     } finally {
       setIsLoading(false);
@@ -245,7 +252,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!token) {
       throw new Error("No token found. User must be logged in to like a book.");
     }
-
+    // Checks if a book id in saved books is already saved
     const isSaved = savedBooks.includes(bookId);
 
     try {
@@ -254,7 +261,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         await addToCollectionAPI(bookId, token);
       }
-
+      // Saves books on the backends and makes sure to update to populate with the most recently liked book to appear first on the user's collection page
       setSavedBooks((prev) =>
         isSaved ? prev.filter((id) => id !== bookId) : [bookId, ...prev]
       );

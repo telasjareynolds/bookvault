@@ -23,8 +23,8 @@ function UserCollection({
   };
 
   return (
-    <section className="flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit">
-      <div className="flex flex-col justify-center items-center w-full">
+    <section className="mt-9 flex justify-center items-center w-full bg-[rgba(0, 0, 0, 0.266)] text-white sx:max-w-fit h-full ">
+      <div className="flex flex-col justify-center items-center w-full ">
         <div className="relative w-full flex flex-col items-center justify-center gap-4 md:flex-row md:items-center  ">
           <h1 className="font-bold m-0 mb-4 text-4xl leading-6 md:mb-8 text-center ">
             {`${currentUser?.name}'s Collection`}

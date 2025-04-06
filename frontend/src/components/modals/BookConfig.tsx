@@ -19,7 +19,7 @@ const BookConfig = ({
   const { createBook, editBook, closeModal, setSelectedBookId, openModal } =
     useAuth();
 
-  const imageUrl = selectedBook?.imageLink
+  const imageUrl = selectedBook?.imageLink.startsWith("https")
     ? selectedBook.imageLink
     : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${selectedBook?.imageLink}`;
 

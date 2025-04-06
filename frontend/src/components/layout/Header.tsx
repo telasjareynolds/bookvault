@@ -2,12 +2,7 @@ import { Navigation } from "./index";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 
-export interface HeaderProps {
-  openLoginModal: () => void;
-  openLogoutModal: () => void;
-}
-
-function Header({ openLoginModal, openLogoutModal }: HeaderProps) {
+function Header() {
   return (
     <header className="flex flex-wrap items-center justify-center flex-col sm:justify-between sm:flex-row bg-black font-bold pt-0 pb-5 min-w-fit text-center">
       <Link to="/">
@@ -16,12 +11,8 @@ function Header({ openLoginModal, openLogoutModal }: HeaderProps) {
       <h2 className="leading-9 text-4xl font-bold text-center text-white">
         Book Vault
       </h2>
-
       <div className="flex gap-3 flex-wrap justify-center">
-        <Navigation
-          openLoginModal={openLoginModal}
-          openLogoutModal={openLogoutModal}
-        />
+        <Navigation />
       </div>
     </header>
   );

@@ -1,13 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
-interface NavigationProps {
-  openLoginModal: () => void;
-  openLogoutModal: () => void;
-}
-
-function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
-  const { currentUser } = useAuth();
+function Navigation() {
+  const { currentUser, openModal } = useAuth();
 
   const isLoggedIn = currentUser && currentUser.name;
 
@@ -36,7 +31,7 @@ function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
           <button
             type="button"
             className="transition transform hover:-translate-y-1 hover:text-red-600 hover:text-[20px]"
-            onClick={openLogoutModal}
+            onClick={() => openModal("logout")}
           >
             {" "}
             Logout
@@ -46,7 +41,7 @@ function Navigation({ openLoginModal, openLogoutModal }: NavigationProps) {
         <button
           className="transition transform hover:-translate-y-1 hover:text-red-600 hover:text-[20px]"
           type="button"
-          onClick={openLoginModal}
+          onClick={() => openModal("login")}
         >
           Sign in
         </button>

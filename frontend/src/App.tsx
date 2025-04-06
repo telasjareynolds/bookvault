@@ -79,11 +79,10 @@ function App() {
       ) : (
         <>
           <Header
-            openLoginModal={() => openModal("login")}
-            openLogoutModal={() => openModal("logout")}
+         
           />
           <div
-            className="flex flex-wrap sm:items-center sm:justify-center relative w-full min-h-screen bg-repeat bg-[length:400px_400px] font-[BonaNova] text-center"
+            className="flex flex-wrap sm:items-start sm:justify-center relative w-full min-h-screen bg-repeat bg-[length:400px_400px] font-[BonaNova] text-center"
             style={{
               backgroundImage: `url(${libraryBg}), radial-gradient(circle at top center, rgba(0,0,0,0.550), rgba(0,0,0,.5))`,
               backgroundBlendMode: "overlay",
@@ -113,7 +112,6 @@ function App() {
         handleModalClose={closeModal}
         isOpen={activeModal === "register"}
         buttonText={isLoading ? "Saving..." : "Sign Up"}
-        openLoginModal={() => openModal("login")}
         name="register"
         title="Register"
       />
@@ -123,14 +121,13 @@ function App() {
         handleModalClose={closeModal}
         isOpen={activeModal === "login"}
         buttonText={isLoading ? "Saving..." : "Log In"}
-        openRegisterModal={() => openModal("register")}
       />
       <RegistrationSuccessful
         title="Registration successfully completed!"
         handleModalClose={closeModal}
         name="successful-registration"
         isOpen={activeModal === "successful-registration"}
-        openLoginModal={() => openModal("login")}
+       
       />
 
       <ConfirmLogout
