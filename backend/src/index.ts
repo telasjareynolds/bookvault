@@ -14,6 +14,12 @@ const router = Router();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.send(
+    '📚 Welcome to the BookVault API! Try <a href="/books">/books</a> to see available books.'
+  );
+});
+
 // Add health route here
 app.get("/health", (_req, res) => {
   res.status(200).send("OK");
