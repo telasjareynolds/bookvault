@@ -18,12 +18,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "is-ip": "^5.0.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.1",
-    "valid-ip-scope": "^3.4.4",
     "validator": "^13.15.0"
   },
   "devDependencies": {
@@ -31,6 +31,7 @@
     "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/is-ip": "^2.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.14.0",

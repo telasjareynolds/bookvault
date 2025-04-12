@@ -1,3 +1,3 @@
 export * from "./logger";
-export * from "./ipValidator";
+export * from "./valid-ip-scope";
 export * from "./constants";
