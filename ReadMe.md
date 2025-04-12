@@ -67,14 +67,26 @@ cd ../frontend
 npm install
 
 3. Environment Variables
-   In the backend/ folder, create a .env file with the following content:
+This app includes a pre-populated database of 100 books. You have 2 options on how you'd like to access it. 
+
+Option 1:
+⚠️ This connection is read-only. You’ll be able to view the 100 books, but user registration and book creation will not work unless you connect your own MongoDB.
+If you want to run the app without setting up your own database, you can use our hosted read-only MongoDB Atlas database:
+   In the backend/ folder, create a .env file with the following content: 
    PORT=3001
-   MONGO_URI=mongodb://localhost:27017/bookvault
+   MONGO_URI=mongodb+srv://readonlyUser:Welcome123@cluster0.mongodb.net/bookvault?retryWrites=true&w=majority
    JWT_SECRET=your_jwt_secret
 
 Replace your_jwt_secret with a secure secret key for JWT.
 
-4. Use this link to download the default JSON books that are set up to appear correctly throughout this project. Import them into mongodb and make sure the database is connected: https://github.com/telasjareynolds/book-file/blob/main/bookvault.books.json
+-- OR --
+
+Option 2:
+ Use this link to download the default JSON books that are set up to appear correctly throughout this project. Import them into mongodb and make sure the database is connected: https://github.com/telasjareynolds/book-file/blob/main/bookvault.books.json
+    In the backend/ folder, create a .env file with the following content: 
+   PORT=3001
+   MONGO_URI=mongodb://localhost:27017/bookvault
+   JWT_SECRET=your_jwt_secret
 
 -- For reference, this file originally came from "https://github.com/benoitvallon/100-best-books/blob/master/books.json" but I've converted the value of id into strings for the project.
 
