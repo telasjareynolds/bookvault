@@ -8,7 +8,7 @@ function Header() {
       <Link to="/">
         <img className="w-24 h-17 pl-2 py-2" src={logo} alt="header logo" />
       </Link>
-      <h2 className="leading-9 text-4xl font-bold text-center text-white">
+      <h2 className="leading-9 text-4xl font-bold text-center text-white ml-0 py-3 xs:py-0 xs:ml-8">
         Book Vault
       </h2>
       <div className="flex gap-3 flex-wrap justify-center">

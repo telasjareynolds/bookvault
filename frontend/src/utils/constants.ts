@@ -1,8 +1,8 @@
-const isProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.MODE === "production";
 
 export const BASE_URL = isProd
   ? import.meta.env.VITE_API_BASE
-  : 'http://localhost:8000';
+  : "http://localhost:8000";
 
 export function checkResponse(res: Response) {
   if (res.ok) {
