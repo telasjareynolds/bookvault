@@ -102,7 +102,7 @@ npm run dev
 
 Frontend: http://localhost:3000
 
-Backend: http://localhost:3001
+Backend: http://localhost:8000
 
 🔐 Authentication
 This project uses a provided backend authentication system. Once logged in:
