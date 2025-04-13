@@ -202,7 +202,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     removeToken();
     setIsLoggedIn(false);
     setCurrentUser(null);
+    setSavedBooks([]);
     closeModal();
+  
+    // Reset books to default public ones
+    getDefaultBooks()
+      .then(setBookCollection)
+      .catch((err) => {
+        console.error("Failed to load default books after logout", err);
+      });
   };
 
   const createBook = async (bookData: BookInput): Promise<Book> => {
