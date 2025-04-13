@@ -26,8 +26,6 @@ function App() {
   const {
     books,
     logout,
-
-    openModal,
     closeModal,
     activeModal,
     selectedBookId,
