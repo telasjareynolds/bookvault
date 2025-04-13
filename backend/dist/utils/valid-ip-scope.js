@@ -24,6 +24,10 @@ const validateIp = (ip) => {
 exports.validateIp = validateIp;
 const clientUse = () => {
     return (req, res, next) => {
+        // Allow all IPs in development
+        if (process.env.NODE_ENV !== "production") {
+            return next();
+        }
         const { isValid, reason } = (0, exports.validateIp)(req.ip);
         if (!isValid) {
             res.status(403).json({ error: reason || "Invalid IP" });
