@@ -1,4 +1,6 @@
-export const BASE_URL = import.meta.env.VITE_API_BASE === 'production'
+const isProd = import.meta.env.MODE === 'production';
+
+export const BASE_URL = isProd
   ? import.meta.env.VITE_API_BASE
   : 'http://localhost:8000';
 
