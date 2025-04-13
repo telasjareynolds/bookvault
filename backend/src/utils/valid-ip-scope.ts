@@ -1,18 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-// @ts-ignore
-const clientIpValidator = require("is-ip");
 
-const LOCALHOST_IPS: readonly string[] = [
-  "::1",
-  "::ffff:127.0.0.1",
-  "127.0.0.1",
-];
+// Basic regex check for IPv4 and IPv6 formats
+const simpleIpRegex =
+  /^(::ffff:)?((25[0-5]|2[0-4]\d|1\d\d|\d\d|\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|\d\d|\d)$|^(([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4})$/;
 
-export const validateIp = (ip: string | undefined): { isValid: boolean; reason?: string } => {
+export const validateIp = (
+  ip: string | undefined
+): { isValid: boolean; reason?: string } => {
   if (!ip) return { isValid: false, reason: "IP is empty" };
-  if (LOCALHOST_IPS.includes(ip)) return { isValid: false, reason: "Localhost IP not allowed" };
 
-  const valid = clientIpValidator(ip);
+  const valid = simpleIpRegex.test(ip);
   return {
     isValid: valid,
     reason: valid ? undefined : "Invalid IP format",
@@ -33,7 +30,7 @@ export const clientUse = () => {
 export const clientInspector = async (req: Request) => {
   return {
     ip: req.ip,
-    userAgent: req.headers['user-agent'],
+    userAgent: req.headers["user-agent"],
     method: req.method,
     time: new Date().toISOString(),
   };

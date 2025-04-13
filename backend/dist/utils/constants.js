@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CONFLICT_ERROR_MSG = exports.FORBIDDEN_ERROR_MSG = exports.UNAUTHENTICATED_ERROR_MSG = exports.UNAUTHORIZED_ERROR_MSG = exports.NOTFOUND_ERROR_MSG = exports.INVALID_BADREQUEST_MSG = exports.ID_BADREQUEST_MSG = exports.SUCCESSFUL_REQUEST_MSG = void 0;
+exports.SUCCESSFUL_REQUEST_MSG = "Request was successful";
+exports.ID_BADREQUEST_MSG = "Invalid or missing ID";
+exports.INVALID_BADREQUEST_MSG = "Email or password is invalid. Valid input is required.";
+exports.NOTFOUND_ERROR_MSG = "Current user or item not found";
+exports.UNAUTHORIZED_ERROR_MSG = "Incorrect email or password";
+exports.UNAUTHENTICATED_ERROR_MSG = "User is not authenticated";
+exports.FORBIDDEN_ERROR_MSG = "Book is not owned by this user. Access denied.";
+exports.CONFLICT_ERROR_MSG = "A user with this email already exists.";
